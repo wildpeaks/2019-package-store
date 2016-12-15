@@ -1,0 +1,22 @@
+{
+  "name": "@wildpeaks/actions-worker",
+  "version": "1.0.1",
+  "description": "ActionsWorker class",
+  "main": "src/ActionsWorker.js",
+  "files": [
+    "src/ActionsWorker.js"
+  ],
+  "repository": "https://github.com/wildpeaks/package-actions-worker",
+  "keywords": [
+    "wildpeaks",
+    "webpack",
+    "json",
+    "worker"
+  ],
+  "author": "Cecile Muller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wildpeaks/package-actions-worker/issues"
+  },
+  "homepage": "https://github.com/wildpeaks/package-actions-worker#readme"
+}
