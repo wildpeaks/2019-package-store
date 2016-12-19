@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 /* eslint-disable no-undefined */
+/* global setTimeout */
 'use strict';
-const {strictEqual} = require('assert');
-// const {spy} = require('sinon');
+const {strictEqual, deepStrictEqual} = require('assert');
+const {spy} = require('sinon');
 const ActionsWorker = require('..');
 
 
@@ -91,13 +92,70 @@ function test_invalid_message(message){
 	} catch(e){
 		throws = true;
 	}
-	strictEqual(throws, true, `onmessage throws an error`);
+	strictEqual(throws, true, 'onmessage throws an error');
+}
+
+
+function test_invalid_action_id(actionId){
+	test_invalid_message({
+		data: {
+			action: actionId
+		}
+	});
+}
+
+
+function test_valid_message_without_setstate(done){
+	const myaction = spy();
+	const serialize = spy();
+	const postMessage = spy();
+
+	let worker;
+	let throws = false;
+
+	try {
+		worker = new ActionsWorker({
+			actions: {myaction},
+			serialize,
+			postMessage
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `Constructor doesn't throw an error`);
+
+	const message = {
+		action: 'myaction',
+		hello: 123
+	};
+	try {
+		worker.onmessage({
+			data: message
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `onmessage doesn't throw an error`);
+
+	setTimeout(() => {
+		strictEqual(myaction.callCount, 1, 'myaction was called once');
+		strictEqual(serialize.callCount, 0, 'serialize was not called');
+		strictEqual(postMessage.callCount, 0, 'postMessage was not called');
+
+		const actionArgs = myaction.firstCall.args;
+		strictEqual(actionArgs.length, 4, 'myaction received four parameters');
+		deepStrictEqual(actionArgs[0], message, 'First parameter is the message');
+		strictEqual(typeof actionArgs[1], 'function', 'Second parameter is a function');
+		strictEqual(typeof actionArgs[2], 'function', 'Third parameter is a function');
+		strictEqual(typeof actionArgs[3], 'function', 'Fourth parameter is a function');
+
+		done();
+	});
 }
 
 
 describe('@wildpeaks/actions-worker', /* @this */ function(){
-	this.slow(500);
-	this.timeout(1000);
+	this.timeout(300);
 
 	it('Missing postMessage', test_invalid_postMessage.bind(this, undefined));
 	it('Invalid postMessage (1)', test_invalid_postMessage.bind(this, 1));
@@ -125,17 +183,22 @@ describe('@wildpeaks/actions-worker', /* @this */ function(){
 	it('Invalid message ("fake")', test_invalid_message.bind(this, 'fake'));
 	it('Invalid message ({})', test_invalid_message.bind(this, {}));
 
-	it('Invalid Action ID (undefined)', test_invalid_message.bind(this, {action: undefined}));
-	it('Invalid Action ID (1)', test_invalid_message.bind(this, {action: 1}));
-	it('Invalid Action ID (true)', test_invalid_message.bind(this, {action: true}));
-	it('Invalid Action ID (null)', test_invalid_message.bind(this, {action: null}));
-	it('Invalid Action ID ("")', test_invalid_message.bind(this, {action: ''}));
-	it('Invalid Action ID ("fake")', test_invalid_message.bind(this, {action: 'fake'}));
-	it('Invalid Action ID ({})', test_invalid_message.bind(this, {action: {}}));
+	it('Invalid Action ID (undefined)', test_invalid_action_id.bind(this, undefined));
+	it('Invalid Action ID (1)', test_invalid_action_id.bind(this, 1));
+	it('Invalid Action ID (true)', test_invalid_action_id.bind(this, true));
+	it('Invalid Action ID (null)', test_invalid_action_id.bind(this, null));
+	it('Invalid Action ID ("")', test_invalid_action_id.bind(this, ''));
+	it('Invalid Action ID ("fake")', test_invalid_action_id.bind(this, 'fake'));
+	it('Invalid Action ID ({})', test_invalid_action_id.bind(this, {}));
 
-	// And test that it calls serialize() and postMessage with the right args.
-	it('Valid action (single message)');
-	it('Valid action (multiple messages)');
+	it('Valid message (no setState)', test_valid_message_without_setstate);
+
+	// TODO also test that getState that is provided to the action gives you the current state, not an obsolete old version
+	it('Valid message (with setState)' /*, test_valid_message_with_setstate*/);
+	it('Multiple valid messages');
+
+
+	it(`onmessage doesn't hide the error if Action throws an error`);
 
 	it(`No props emitted if TestAction doesn't call setState`);
 	it('No props emitter if serialize throws an exception'); // and check the ActionsWorker doesn't throw an exception too
