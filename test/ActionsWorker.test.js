@@ -37,12 +37,13 @@ function test_invalid_serialize(serialize){
 
 
 function test_invalid_actions(actions){
+	/* eslint-disable no-empty-function */
 	let throws = false;
 	try {
 		const worker = new ActionsWorker({ // eslint-disable-line no-unused-vars
 			actions,
-			serialize: () => {}, // eslint-disable-line no-empty-function
-			postMessage: () => {} // eslint-disable-line no-empty-function
+			serialize: () => {},
+			postMessage: () => {}
 		});
 	} catch(e){
 		throws = true;
@@ -52,17 +53,45 @@ function test_invalid_actions(actions){
 
 
 function test_empty_actions(actions){
+	/* eslint-disable no-empty-function */
 	let throws = false;
 	try {
 		const worker = new ActionsWorker({ // eslint-disable-line no-unused-vars
 			actions,
-			serialize: () => {}, // eslint-disable-line no-empty-function
-			postMessage: () => {} // eslint-disable-line no-empty-function
+			serialize: () => {},
+			postMessage: () => {}
 		});
 	} catch(e){
 		throws = true;
 	}
 	strictEqual(throws, false, 'Throws an Error');
+}
+
+
+function test_invalid_message(message){
+	/* eslint-disable no-empty-function */
+	let worker;
+	let throws = false;
+
+	try {
+		worker = new ActionsWorker({
+			actions: {
+				myaction: () => {}
+			},
+			serialize: () => {},
+			postMessage: () => {}
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `Constructor doesn't throw an error`);
+
+	try {
+		worker.onmessage(message);
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, true, `onmessage throws an error`);
 }
 
 
@@ -88,14 +117,23 @@ describe('@wildpeaks/actions-worker', /* @this */ function(){
 	it('Invalid actions (null)', test_invalid_actions.bind(this, null));
 	it('Empty actions', test_empty_actions.bind(this, {}));
 
-	it('Invalid Action ID (1)');
-	it('Invalid Action ID (true)');
-	it('Invalid Action ID (null)');
-	it('Invalid Action ID ("")');
-	it('Invalid Action ID ("fake")');
-	it('Invalid Action ID ({})');
+	it('Invalid message (undefined)', test_invalid_message.bind(this, undefined));
+	it('Invalid message (1)', test_invalid_message.bind(this, 1));
+	it('Invalid message (true)', test_invalid_message.bind(this, true));
+	it('Invalid message (null)', test_invalid_message.bind(this, null));
+	it('Invalid message ("")', test_invalid_message.bind(this, ''));
+	it('Invalid message ("fake")', test_invalid_message.bind(this, 'fake'));
+	it('Invalid message ({})', test_invalid_message.bind(this, {}));
 
-	// and test that it calls serialize() and postMessage with the right args
+	it('Invalid Action ID (undefined)', test_invalid_message.bind(this, {action: undefined}));
+	it('Invalid Action ID (1)', test_invalid_message.bind(this, {action: 1}));
+	it('Invalid Action ID (true)', test_invalid_message.bind(this, {action: true}));
+	it('Invalid Action ID (null)', test_invalid_message.bind(this, {action: null}));
+	it('Invalid Action ID ("")', test_invalid_message.bind(this, {action: ''}));
+	it('Invalid Action ID ("fake")', test_invalid_message.bind(this, {action: 'fake'}));
+	it('Invalid Action ID ({})', test_invalid_message.bind(this, {action: {}}));
+
+	// And test that it calls serialize() and postMessage with the right args.
 	it('Valid action (single message)');
 	it('Valid action (multiple messages)');
 
