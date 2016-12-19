@@ -1,5 +1,7 @@
 /* eslint-env node, worker */
 'use strict';
+const deepStrictEqual = require('deep-strict-equal');
+
 
 function required(){
 	throw new Error('Missing required parameter');
@@ -9,16 +11,25 @@ function required(){
 /**
  * @class
  */
-function ActionsWorker({postMessage = required(), serialize = required(), actions = {}} = {}){
+function ActionsWorker({postMessage = required(), serialize = required(), actions = {}} = {}){ // eslint-disable-line no-shadow
+	if (typeof postMessage !== 'function'){
+		throw new Error('Invalid postMessage');
+	}
+	if (typeof serialize !== 'function'){
+		throw new Error('Invalid serialize');
+	}
+	if ((actions === null) || (typeof actions !== 'object')){
+		throw new Error('Invalid actions');
+	}
+
 	this.postMessage = postMessage;
 	this.serialize = serialize;
 	this.actions = actions;
-	this.lastMessage = '';
+	this.state = {};
+	this.props = {};
 
-	const state = {};
-	Object.freeze(state);
-	this.state = state;
-
+	Object.freeze(this.props);
+	Object.freeze(this.state);
 	Object.seal(this);
 }
 
@@ -36,13 +47,20 @@ ActionsWorker.prototype.getState = function(){
  * Sets the current immutable state.
  * @param  {State}  newState
  */
-ActionsWorker.prototype.setState = function(newState){
-	const props = this.serialize(newState);
-	const newMessage = JSON.stringify(props);
-	if (newMessage !== this.lastMessage){
-		this.state = newState;
-		this.lastMessage = newMessage;
-		this.postMessage(props);
+ActionsWorker.prototype.setState = function(state){
+	let props;
+	let throws = false;
+	try {
+		props = this.serialize(state);
+	} catch(e){
+		throws = true;
+	}
+	if (!throws){
+		this.state = state;
+		if (!deepStrictEqual(props, this.props)){
+			this.props = props;
+			this.postMessage(props);
+		}
 	}
 };
 
