@@ -105,17 +105,30 @@ function test_invalid_action_id(actionId){
 }
 
 
-function test_valid_message_without_setstate(done){
-	const myaction = spy();
-	const serialize = spy();
-	const postMessage = spy();
+function test_valid_messages(done){
+	const oldState = {
+		mytest: 111
+	};
+	const newState = {
+		mytest: 222
+	};
+	const serializedNewState = {
+		myserializedtest: 'BBB'
+	};
+	Object.freeze(oldState);
+	Object.freeze(newState);
+	Object.freeze(serializedNewState);
 
 	let worker;
 	let throws = false;
+	const action1 = spy();
+	const action2 = spy();
+	const serialize = spy(() => serializedNewState);
+	const postMessage = spy();
 
 	try {
 		worker = new ActionsWorker({
-			actions: {myaction},
+			actions: {action1, action2},
 			serialize,
 			postMessage
 		});
@@ -124,13 +137,17 @@ function test_valid_message_without_setstate(done){
 	}
 	strictEqual(throws, false, `Constructor doesn't throw an error`);
 
-	const message = {
-		action: 'myaction',
+	const message1 = {
+		action: 'action1',
 		hello: 123
+	};
+	const message2 = {
+		action: 'action2',
+		world: 234
 	};
 	try {
 		worker.onmessage({
-			data: message
+			data: message1
 		});
 	} catch(e){
 		throws = true;
@@ -138,21 +155,132 @@ function test_valid_message_without_setstate(done){
 	strictEqual(throws, false, `onmessage doesn't throw an error`);
 
 	setTimeout(() => {
-		strictEqual(myaction.callCount, 1, 'myaction was called once');
+		strictEqual(action1.callCount, 1, 'action1 was called once');
+		strictEqual(action2.callCount, 0, 'action2 was not called');
 		strictEqual(serialize.callCount, 0, 'serialize was not called');
 		strictEqual(postMessage.callCount, 0, 'postMessage was not called');
 
-		const actionArgs = myaction.firstCall.args;
-		strictEqual(actionArgs.length, 4, 'myaction received four parameters');
-		deepStrictEqual(actionArgs[0], message, 'First parameter is the message');
-		strictEqual(typeof actionArgs[1], 'function', 'Second parameter is a function');
-		strictEqual(typeof actionArgs[2], 'function', 'Third parameter is a function');
-		strictEqual(typeof actionArgs[3], 'function', 'Fourth parameter is a function');
+		const args1 = action1.firstCall.args;
+		strictEqual(args1.length, 4, 'action1 received four parameters');
+		deepStrictEqual(args1[0], message1, 'action1: First parameter is the message');
+		strictEqual(typeof args1[1], 'function', 'action1: Second parameter is a function');
+		strictEqual(typeof args1[2], 'function', 'action1: Third parameter is a function');
+		strictEqual(typeof args1[3], 'function', 'action1: Fourth parameter is a function');
+
+		const getState = args1[1];
+		worker.state = oldState;
+		deepStrictEqual(getState(), oldState, 'getState returns the test state');
+
+		const setState = args1[2];
+		setState(newState);
+		strictEqual(serialize.callCount, 1, 'serialize was called by triggering setState');
+		strictEqual(postMessage.callCount, 1, 'postMessage was called by triggering setState');
+		deepStrictEqual(worker.state, newState, 'worker.state is the new state');
+		deepStrictEqual(worker.props, serializedNewState, 'worker.props is the serialized new state');
+		deepStrictEqual(postMessage.firstCall.args, [serializedNewState], 'postMessage received the serialized new state');
+
+		strictEqual(action2.callCount, 0, `action2 still hasn't been called`);
+		const dispatch = args1[3];
+		dispatch(message2);
+		strictEqual(action2.callCount, 1, 'action2 has been called');
+
+		const args2 = action2.firstCall.args;
+		strictEqual(args2.length, 4, 'action2 received four parameters');
+		deepStrictEqual(args2[0], message2, 'action2: First parameter is the message');
+		strictEqual(typeof args2[1], 'function', 'action2: Second parameter is a function');
+		strictEqual(typeof args2[2], 'function', 'action2: Third parameter is a function');
+		strictEqual(typeof args2[3], 'function', 'action2: Fourth parameter is a function');
+
+		const getState2 = args2[1];
+		deepStrictEqual(getState(), newState, 'getState from actions1 returns the new state');
+		deepStrictEqual(getState2(), newState, 'getState from actI wouions2 returns the new state');
 
 		done();
 	});
 }
 
+
+function test_direct_action_throws(){
+	/* eslint-disable no-empty-function */
+	let worker;
+	let throws = false;
+	const errorMessage = 'Exception sent by myaction';
+
+	try {
+		worker = new ActionsWorker({
+			actions: {
+				myaction: () => {
+					throw new Error(errorMessage);
+				}
+			},
+			serialize: () => {},
+			postMessage: () => {}
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `Constructor doesn't throw an error`);
+
+	let thrownErrorMessage = '';
+	try {
+		worker.onmessage({
+			data: {
+				action: 'myaction',
+				hello: 111
+			}
+		});
+	} catch(e){
+		thrownErrorMessage = e.message;
+	}
+	strictEqual(thrownErrorMessage, errorMessage, `onmessage doesn't prevent receiving the exception`);
+}
+
+
+function test_dispatched_action_throws(){
+	/* eslint-disable no-empty-function */
+	let worker;
+	let throws = false;
+	const errorMessage = 'Exception sent by myaction1';
+
+	try {
+		worker = new ActionsWorker({
+			actions: {
+				myaction1: () => {
+					throw new Error(errorMessage);
+				},
+				myaction2: (data, getState, setState, dispatch) => {
+					dispatch({
+						action: 'myaction1',
+						hello: 111
+					});
+				}
+			},
+			serialize: () => {},
+			postMessage: () => {}
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `Constructor doesn't throw an error`);
+
+	let thrownErrorMessage = '';
+	try {
+		worker.onmessage({
+			data: {
+				action: 'myaction2',
+				hello: 222
+			}
+		});
+	} catch(e){
+		thrownErrorMessage = e.message;
+	}
+	strictEqual(thrownErrorMessage, errorMessage, `dispatch doesn't prevent receiving the exception`);
+}
+
+
+//
+// test that it doesn't swallow exception when called from .onmessage and also from .dispatch called from the action
+//
 
 describe('@wildpeaks/actions-worker', /* @this */ function(){
 	this.timeout(300);
@@ -191,14 +319,9 @@ describe('@wildpeaks/actions-worker', /* @this */ function(){
 	it('Invalid Action ID ("fake")', test_invalid_action_id.bind(this, 'fake'));
 	it('Invalid Action ID ({})', test_invalid_action_id.bind(this, {}));
 
-	it('Valid message (no setState)', test_valid_message_without_setstate);
-
-	// TODO also test that getState that is provided to the action gives you the current state, not an obsolete old version
-	it('Valid message (with setState)' /*, test_valid_message_with_setstate*/);
-	it('Multiple valid messages');
-
-
-	it(`onmessage doesn't hide the error if Action throws an error`);
+	it('Valid messages', test_valid_messages);
+	it(`Exceptions thrown from Action (onmessage)`, test_direct_action_throws);
+	it(`Exceptions thrown from Action (dispatch)`, test_dispatched_action_throws);
 
 	it(`No props emitted if TestAction doesn't call setState`);
 	it('No props emitter if serialize throws an exception'); // and check the ActionsWorker doesn't throw an exception too
