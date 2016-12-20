@@ -48,19 +48,11 @@ ActionsWorker.prototype.getState = function(){
  * @param  {State}  newState
  */
 ActionsWorker.prototype.setState = function(state){
-	let props;
-	let throws = false;
-	try {
-		props = this.serialize(state);
-	} catch(e){
-		throws = true;
-	}
-	if (!throws){
-		this.state = state;
-		if (!deepStrictEqual(props, this.props)){
-			this.props = props;
-			this.postMessage(props);
-		}
+	const props = this.serialize(state);
+	this.state = state;
+	if (!deepStrictEqual(props, this.props)){
+		this.props = props;
+		this.postMessage(props);
 	}
 };
 

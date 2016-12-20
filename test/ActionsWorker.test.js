@@ -263,7 +263,7 @@ function test_dispatched_action_throws(){
 	}
 	strictEqual(throws, false, `Constructor doesn't throw an error`);
 
-	let thrownErrorMessage = '';
+	let thrownErrorMessage = 'No exception thrown';
 	try {
 		worker.onmessage({
 			data: {
@@ -278,9 +278,52 @@ function test_dispatched_action_throws(){
 }
 
 
-//
-// test that it doesn't swallow exception when called from .onmessage and also from .dispatch called from the action
-//
+function test_serialize_throws(){
+	/* eslint-disable no-empty-function */
+	let worker;
+	let throws = false;
+	const errorMessage = 'Exception sent by serialize';
+
+	try {
+		worker = new ActionsWorker({
+			actions: {
+				myaction: (data, getState, setState) => {
+					setState({
+						mydata: 111
+					});
+				}
+			},
+			serialize: () => {
+				throw new Error(errorMessage);
+			},
+			postMessage: () => {}
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `Constructor doesn't throw an error`);
+
+	let thrownErrorMessage = 'No exception thrown';
+	try {
+		worker.onmessage({
+			data: {
+				action: 'myaction',
+				hello: 222
+			}
+		});
+	} catch(e){
+		thrownErrorMessage = e.message;
+	}
+	strictEqual(thrownErrorMessage, errorMessage, `Exceptions from serialize can be received`);
+}
+
+
+function test_skip_props(done){
+	// Even if the properties of the props object are in a different order
+	// but the state itself might be different
+	throw new Error('Implement the test');
+}
+
 
 describe('@wildpeaks/actions-worker', /* @this */ function(){
 	this.timeout(300);
@@ -320,16 +363,9 @@ describe('@wildpeaks/actions-worker', /* @this */ function(){
 	it('Invalid Action ID ({})', test_invalid_action_id.bind(this, {}));
 
 	it('Valid messages', test_valid_messages);
-	it(`Exceptions thrown from Action (onmessage)`, test_direct_action_throws);
-	it(`Exceptions thrown from Action (dispatch)`, test_dispatched_action_throws);
+	it('Exceptions thrown from Action (onmessage)', test_direct_action_throws);
+	it('Exceptions thrown from Action (dispatch)', test_dispatched_action_throws);
+	it('Exceptions thrown from serialize', test_serialize_throws);
 
-	it(`No props emitted if TestAction doesn't call setState`);
-	it('No props emitter if serialize throws an exception'); // and check the ActionsWorker doesn't throw an exception too
-
-	// Even if the properties of the props object are in a different order
-	// but the state itself might be different
-	it('No props if the resulting serialized props are the same');
-
-	it('Do not store new state if serialize throws an exception');
-	it('Store new state even if serialized props is the same message as last (just skip emitting props in that case)');
+	it('Props emitted only when serialized data changes'/*, test_skip_props*/);
 });
