@@ -319,9 +319,55 @@ function test_serialize_throws(){
 
 
 function test_skip_props(done){
-	// Even if the properties of the props object are in a different order
-	// but the state itself might be different
-	throw new Error('Implement the test');
+	let throws = false;
+	const postMessage = spy();
+	const myaction = spy((data, getState, setState) => {
+		setState({
+			mydata: data.hello
+		});
+	});
+
+	try {
+		const worker = new ActionsWorker({
+			actions: {myaction},
+			serialize: state => { // eslint-disable-line arrow-body-style
+				return state.flipped ? {myother: 111, mydata: state.mydata} : {mydata: state.mydata, myother: 111};
+			},
+			postMessage
+		});
+		worker.onmessage({
+			data: {
+				action: 'myaction',
+				hello: 'FIRST',
+				flipped: false
+			}
+		});
+		worker.onmessage({
+			data: {
+				action: 'myaction',
+				hello: 'FIRST',
+				flipped: true
+			}
+		});
+		worker.onmessage({
+			data: {
+				action: 'myaction',
+				hello: 'SECOND',
+				flipped: false
+			}
+		});
+	} catch(e){
+		throws = true;
+	}
+	strictEqual(throws, false, `No error thrown`);
+
+	setTimeout(() => {
+		strictEqual(myaction.callCount, 3, 'myaction was called three times');
+		strictEqual(postMessage.callCount, 2, 'postMessage was called only twice');
+		deepStrictEqual(postMessage.firstCall.args, [{mydata: 'FIRST', myother: 111}], 'First props');
+		deepStrictEqual(postMessage.secondCall.args, [{mydata: 'SECOND', myother: 111}], 'Second props');
+		done();
+	});
 }
 
 
@@ -367,5 +413,5 @@ describe('@wildpeaks/actions-worker', /* @this */ function(){
 	it('Exceptions thrown from Action (dispatch)', test_dispatched_action_throws);
 	it('Exceptions thrown from serialize', test_serialize_throws);
 
-	it('Props emitted only when serialized data changes'/*, test_skip_props*/);
+	it('Props emitted only when serialized data changes', test_skip_props);
 });
