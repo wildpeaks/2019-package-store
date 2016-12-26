@@ -1,6 +1,10 @@
 /* eslint-env node, worker */
 'use strict';
-const deepStrictEqual = require('deep-strict-equal');
+
+
+function deepStrictEqual(obj1, obj2){
+	return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
 
 
 function required(){
