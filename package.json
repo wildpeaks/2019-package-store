@@ -7,8 +7,13 @@
     "src/ActionsWorker.js",
     "test/ActionsWorker.tests.js"
   ],
+  "eslintConfig": {
+ 	"extends": "@wildpeaks/commonjs"
+  },
   "scripts": {
-    "test": "mocha"
+    "test:eslint": "eslint src",
+    "test:mocha": "mocha",
+    "test": "npm run test:eslint && npm run test:mocha"
   },
   "repository": "https://github.com/wildpeaks/package-actions-worker",
   "keywords": [
@@ -24,7 +29,9 @@
   },
   "homepage": "https://github.com/wildpeaks/package-actions-worker#readme",
   "devDependencies": {
+    "eslint": "3.14.1",
     "mocha": "^3.2.0",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.6",
+    "@wildpeaks/eslint-config-commonjs": "1.0.0"
   }
 }
