@@ -1,37 +1,40 @@
 {
   "name": "@wildpeaks/actions-worker",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "ActionsWorker class",
-  "main": "src/ActionsWorker.js",
-  "files": [
-    "src/ActionsWorker.js",
-    "test/ActionsWorker.tests.js"
-  ],
+  "author": "Cecile Muller",
+  "license": "MIT",
   "eslintConfig": {
- 	"extends": "@wildpeaks/commonjs"
+    "extends": "@wildpeaks/typescript"
   },
+  "main": "src/ActionsWorker.ts",
+  "types": "src/ActionsWorker.ts",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "test:eslint": "eslint src",
-    "test:mocha": "mocha",
-    "test": "npm run test:eslint && npm run test:mocha"
+    "test": "jasmine --helper=jasmine.typescript.js test/*.spec.ts"
   },
   "repository": "https://github.com/wildpeaks/package-actions-worker",
   "keywords": [
     "wildpeaks",
-    "webpack",
-    "json",
-    "worker"
+    "typescript",
+    "actions"
   ],
-  "author": "Cecile Muller",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wildpeaks/package-actions-worker/issues"
   },
   "homepage": "https://github.com/wildpeaks/package-actions-worker#readme",
+  "peerDependencies": {
+    "typescript": "*"
+  },
   "devDependencies": {
-    "eslint": "3.14.1",
-    "mocha": "^3.2.0",
-    "sinon": "^1.17.6",
-    "@wildpeaks/eslint-config-commonjs": "1.1.0"
+    "@types/jasmine": "2.8.3",
+    "@types/node": "9.3.0",
+    "@wildpeaks/eslint-config-typescript": "4.3.0",
+    "eslint": "4.15.0",
+    "jasmine": "2.8.0",
+    "ts-node": "4.1.0",
+    "typescript": "2.6.2"
   }
 }
