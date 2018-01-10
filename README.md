@@ -17,7 +17,7 @@ Install:
 
 Example:
 ````ts
-import {ActionsWorker, IDispatcher} from '@wildpeaks/action-worker';
+import {ActionsWorker, IDispatcher} from '@wildpeaks/actions-worker';
 
 
 // The immutable state could be a simple frozen object, class instance, etc.
