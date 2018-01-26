@@ -38,7 +38,7 @@ class Storage extends ActionsWorker<Props, State, Messages> {
 		super();
 		this.actions[Actions.ADD] = add;
 	}
-	protected serialize(state: State): Props { // eslint-disable-line class-methods-use-this
+	protected serialize(state: Readonly<State>): Readonly<Props> { // eslint-disable-line class-methods-use-this
 		const props: Props = {
 			value: `Count is ${state.count}`
 		};

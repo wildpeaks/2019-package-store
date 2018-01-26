@@ -27,7 +27,7 @@ class Storage extends ActionsWorker<Props, State, Messages> {
 		super();
 		this.actions[Actions.DUMMY] = actionDummy;
 	}
-	protected serialize(_state: State): Props { // eslint-disable-line class-methods-use-this
+	protected serialize(_state: Readonly<State>): Readonly<Props> { // eslint-disable-line class-methods-use-this
 		const props: Props = {
 			dummy: 'hello'
 		};
