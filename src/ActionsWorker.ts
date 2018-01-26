@@ -1,24 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 
-interface IFrozen {
-	readonly [key: string]: any;
-}
-
 interface IMessage {
 	action: string | number;
 }
 
 export interface IDispatcher<State, Message> {
-	state: State;
-	schedule(message: Message): void;
+	state: Readonly<State>;
+	schedule(message: Readonly<Message>): void;
 }
 
 /**
  * An Action can perform a single change on the state, and schedule additional actions.
  */
-type Action<State extends IFrozen, Message extends IMessage> = (
-	data: Message,
+type Action<State, Message extends IMessage> = (
+	data: Readonly<Message>,
 	dispatcher: IDispatcher<State, Message>
 ) => void;
 
@@ -26,7 +22,7 @@ type Action<State extends IFrozen, Message extends IMessage> = (
 /**
  * Set of Action instances.
  */
-type Actions<State extends IFrozen, Message extends IMessage> = {
+type Actions<State, Message extends IMessage> = {
 	[key: string]: Action<State, Message>;
 };
 
@@ -34,13 +30,13 @@ type Actions<State extends IFrozen, Message extends IMessage> = {
 /**
  * Callback when props change.
  */
-type OnProps<Props> = (props: Props) => void;
+type OnProps<Props> = (props: Readonly<Props>) => void;
 
 
 /**
  *
  */
-export class ActionsWorker <Props extends IFrozen, State extends IFrozen, Message extends IMessage> {
+export class ActionsWorker <Props, State, Message extends IMessage> {
 
 	protected readonly actions: Actions<State, Message> = {};
 
@@ -53,18 +49,18 @@ export class ActionsWorker <Props extends IFrozen, State extends IFrozen, Messag
 	/**
 	 * Generates render Props from an immutable State.
 	 */
-	protected serialize(_state: State): Props {
+	protected serialize(_state: Readonly<State>): Readonly<Props> {
 		throw new Error('Failed to serialize');
 	}
 
 	/**
 	 * Frozen JSON-compatible props for rendering.
 	 */
-	private _props: Props;
-	public get props(): Props {
+	private _props: Readonly<Props>;
+	public get props(): Readonly<Props> {
 		return this._props;
 	}
-	public set props(newProps: Props) {
+	public set props(newProps: Readonly<Props>) {
 		const hasChanged = JSON.stringify(newProps) !== JSON.stringify(this.props); // @quickhack Not the cleanest "deep strict equal"
 		if (hasChanged){
 			this._props = newProps;
@@ -77,11 +73,11 @@ export class ActionsWorker <Props extends IFrozen, State extends IFrozen, Messag
 	/**
 	 * Immutable application state.
 	 */
-	private _state: State;
-	public get state(): State {
+	private _state: Readonly<State>;
+	public get state(): Readonly<State> {
 		return this._state;
 	}
-	public set state(newState: State) {
+	public set state(newState: Readonly<State>) {
 		const props = this.serialize(newState);
 		this._state = newState;
 		this.props = props;
@@ -90,14 +86,14 @@ export class ActionsWorker <Props extends IFrozen, State extends IFrozen, Messag
 	/**
 	 * Forwards a message to the Worker messages queue.
 	 */
-	public schedule(data: Message): void {
+	public schedule(data: Readonly<Message>): void {
 		this.onmessage({data});
 	}
 
 	/**
 	 * Receives messages from the main thread or from within the Worker.
 	 */
-	public onmessage(event: {data: Message | null | undefined}): void {
+	public onmessage(event: {data: Readonly<Message> | null | undefined}): void {
 		const {data} = event;
 		if (data && (data !== null)){
 			const actionId: string = String(data.action);

@@ -84,7 +84,7 @@ class Storage extends ActionsWorker<Props, State, Messages> {
 		this.actions[Actions.DOWNLOAD] = actionDownload;
 		this.actions[Actions.PARSE] = actionParse;
 	}
-	protected serialize(state: State): Props {
+	protected serialize(state: Readonly<State>): Readonly<Props> {
 		if (state.selected in state.results){
 			const props: Props = {
 				loading: state.loading,
