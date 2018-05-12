@@ -1,6 +1,6 @@
 {
   "name": "@wildpeaks/actions-worker",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "ActionsWorker class",
   "author": "Cecile Muller",
   "license": "MIT",
@@ -29,12 +29,12 @@
     "typescript": "*"
   },
   "devDependencies": {
-    "@types/jasmine": "2.8.5",
-    "@types/node": "9.3.0",
-    "@wildpeaks/eslint-config-typescript": "4.3.0",
-    "eslint": "4.16.0",
-    "jasmine": "2.9.0",
-    "ts-node": "4.1.0",
-    "typescript": "2.6.2"
+    "@types/jasmine": "2.8.7",
+    "@types/node": "6.0.110",
+    "@wildpeaks/eslint-config-typescript": "4.8.0",
+    "eslint": "4.19.1",
+    "jasmine": "3.1.0",
+    "ts-node": "6.0.3",
+    "typescript": "2.8.3"
   }
 }

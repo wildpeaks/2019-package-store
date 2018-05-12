@@ -13,8 +13,9 @@
 		"preserveConstEnums": true,
 		"removeComments": true,
 		"sourceMap": true,
-		"module": "commonjs",
-		"target": "es2017",
-		"lib": ["es2017"]
+		"module": "esnext",
+		"target": "es5",
+		"lib": ["es2017", "dom"],
+		"allowJs": true
 	}
 }
