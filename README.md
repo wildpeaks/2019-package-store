@@ -110,18 +110,20 @@ This way, the action could be used with multiple State types as long as they inc
 
 ## Store
 
-The `Store` class takes three genercs:
+The `Store` class takes three generics:
  - State type of the data it stores
  - Props type of the JSON it emits
  - Messages of actions it might receive
 
-Main properties:
+Store methods:
  - `store.register` adds an action
  - `store.unregister` removes an action
  - `store.schedule` receives messages
- - `store.onprops` is called when props have changed
+ - `store.serialize` generates a Props object given an arbitrary State
+
+Store properties:
  - `store.state` reads and replaces the current immutable state
- - `store.serialize` is a functional method that generates the Props matching an arbitrary State value
+ - `store.onprops` is called when props have changed
 
 
 ### Example
