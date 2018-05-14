@@ -1,7 +1,7 @@
 {
   "name": "@wildpeaks/store",
   "version": "3.0.0-alpha1",
-  "description": "Store class",
+  "description": "Tiny Typescript class to store an immutable State edited by JSON message and emitting JSON props",
   "author": "Cecile Muller",
   "license": "MIT",
   "eslintConfig": {
