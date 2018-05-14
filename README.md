@@ -132,30 +132,32 @@ Let's continue the example that has two actions (`log` and `add`).
 Now that the actions and messages are defined, time to create a Store and use it.
 
 ````ts
-// Internal state in the webworker
-type State = Readonly<{
+// Frozen application state
+type StoreState = Readonly<{
 	count: number;
 	messages: string[];
 }>;
 
-// JSON sent to the main thread
-type Props = Readonly<{
+// JSON sent to the application
+type StoreProps = Readonly<{
 	text1: string;
 	text2: string;
 }>;
 
+// List of possible action messages
+type StoreMessage = LogMessage | AddMessage;
+
 // Create the Store instance
 import {Store} from '@wildpeaks/store';
-type Messages = LogMessage | AddMessage;
-const mystore = new Store<State, Props, Messages>();
+const mystore = new Store<StoreState, StoreProps, StoreMessage>();
 
 // Register actions
 mystore.register('log', actionLog);
 mystore.register('add', actionAdd);
 
-// Converts State to Props
+// Convert State to Props
 mystore.serialize = state => {
-	const props: Props = {
+	const props: StoreProps = {
 		text1: `Count is ${state.count}`,
 		text2: `There are ${state.messages.length} lines`
 	};
@@ -183,3 +185,92 @@ mystore.schedule({
 	text: 'Hello'
 });
 ````
+
+-------------------------------------------------------------------------------
+
+## Webworker
+
+The examples so far were running entirely in the main thread.
+
+However, the store is especially well suited to run in a webworker,
+to avoid heavy calculations from affecting the main thread,
+and only send the data necessary to render.
+
+The package also provides class `StoreWorker`, a tiny optional wrapper
+that improves Typescript Intellisense of the Web Worker.
+
+That way, you can use `.onprops` and `.schedule` the same way
+you would if the store was in the main thread.
+
+The shared [Webpack Config: Web](https://www.npmjs.com/package/@wildpeaks/webpack-config-web) package
+makes it easier to write Typescript applications with webworkers, among other things.
+
+
+### Example
+
+Let's use the same state, props, messages and actions as the other examples.
+
+Main thread `myapp.ts`:
+````ts
+/* eslint-env browser */
+
+// Webworker provided by "worker-loader"
+const MyWorker = require('./store.webworker');
+const myworker: Worker = new MyWorker();
+
+// Wraps the Worker in application-specific types and Store-like properties
+import {StoreWorker} from '@wildpeaks/store';
+const mystore = new StoreWorker<StoreProps, StoreMessage>(myworker);
+
+mystore.onprops = props => {
+	console.log('Render', props);
+};
+
+mystore.schedule({
+	action: 'log',
+	text: 'Hello'
+});
+````
+
+Webworker `store.webworker.ts`:
+````ts
+/* eslint-env worker */
+
+// Create the Store
+import {Store} from '@wildpeaks/store';
+const mystore = new Store<StoreState, StoreProps, StoreMessage>();
+
+// Register actions
+mystore.register('log', actionLog);
+mystore.register('add', actionAdd);
+
+// Convert State to Props
+mystore.serialize = state => {
+	const props: StoreProps = {
+		text1: `Count: ${state.count}`,
+		text2: `Lines: ${state.messages.join(',')}`
+	};
+	Object.freeze(props); // optional
+	return props;
+};
+
+// Hook the webworker and the Store
+const worker: Worker = self as any;
+worker.addEventListener('message', (e: {data: StoreMessage}) => {
+	mystore.schedule(e.data);
+});
+mystore.onprops = props => {
+	worker.postMessage(props);
+};
+
+// Set the initial state
+mystore.state = {
+	count: 123,
+	messages: [
+		'Initial message 1',
+		'Initial message 2'
+	]
+};
+````
+
+See the example in [/test/fixtures/webworker](https://github.com/wildpeaks/package-store/tree/master/test/fixtures/webworker).
