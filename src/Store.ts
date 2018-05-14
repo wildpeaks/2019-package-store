@@ -72,8 +72,8 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 	/**
 	 * Forwards a message to the Worker messages queue.
 	 */
-	public schedule(data: Readonly<TMessage>): void {
-		this.onmessage({data});
+	public schedule(message: Readonly<TMessage>): void {
+		this.onmessage({data: message});
 	}
 
 	/**
@@ -91,6 +91,42 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 			}
 		} else {
 			throw new Error('Message is not an action');
+		}
+	}
+}
+
+
+/* eslint-disable class-methods-use-this */
+export class StoreWorker<TProps, TMessage extends IMessage> {
+
+	/**
+	 * Webworker that can receive actions and emits props.
+	 */
+	private worker: Worker;
+	constructor(worker: Worker) {
+		this.worker = worker;
+		worker.onmessage = this.onmessage.bind(this);
+	}
+
+	/**
+	 * Callback for listening to props change.
+	 */
+	public onprops?: (props: Readonly<TProps>) => void;
+
+	/**
+	 * Forwards a message to the Worker messages queue.
+	 */
+	public schedule(message: Readonly<TMessage>): void {
+		this.worker.postMessage(message);
+	}
+
+	/**
+	 * Receives messages from the webworker.
+	 * @param response
+	 */
+	private onmessage(response: {data: TProps}): void {
+		if (this.onprops){
+			this.onprops(response.data);
 		}
 	}
 }
