@@ -1,6 +1,6 @@
 # ActionsWorker
 
-[![Build Status](https://travis-ci.org/wildpeaks/package-actions-worker.svg?branch=master)](https://travis-ci.org/wildpeaks/package-actions-worker)
+[![Build Status](https://travis-ci.org/wildpeaks/package-store.svg?branch=master)](https://travis-ci.org/wildpeaks/package-store)
 
 Typescript class to store an **immutable state** that can be edited
 using **actions**, and **emits JSON props on state change**.
@@ -12,12 +12,12 @@ but this package can also be used on its own, even without a Web Worker.
 
 Install:
 
-	npm install @wildpeaks/actions-worker
+	npm install @wildpeaks/store
 
 
 Example:
 ````ts
-import {ActionsWorker, IDispatcher} from '@wildpeaks/actions-worker';
+import {ActionsWorker, IDispatcher} from '@wildpeaks/store';
 
 
 // The immutable state could be a simple frozen object, class instance, etc.

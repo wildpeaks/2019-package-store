@@ -1,6 +1,6 @@
 {
-  "name": "@wildpeaks/actions-worker",
-  "version": "2.2.0",
+  "name": "@wildpeaks/store",
+  "version": "3.0.0-alpha1",
   "description": "ActionsWorker class",
   "author": "Cecile Muller",
   "license": "MIT",
@@ -15,16 +15,16 @@
   "scripts": {
     "test": "jasmine --helper=jasmine.typescript.js test/*.spec.ts"
   },
-  "repository": "https://github.com/wildpeaks/package-actions-worker",
+  "repository": "https://github.com/wildpeaks/package-store",
   "keywords": [
     "wildpeaks",
     "typescript",
     "actions"
   ],
   "bugs": {
-    "url": "https://github.com/wildpeaks/package-actions-worker/issues"
+    "url": "https://github.com/wildpeaks/package-store/issues"
   },
-  "homepage": "https://github.com/wildpeaks/package-actions-worker#readme",
+  "homepage": "https://github.com/wildpeaks/package-store#readme",
   "peerDependencies": {
     "typescript": "*"
   },
