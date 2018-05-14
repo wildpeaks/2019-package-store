@@ -145,6 +145,7 @@ type Props = Readonly<{
 }>;
 
 // Create the Store instance
+import {Store} from '@wildpeaks/store';
 type Messages = LogMessage | AddMessage;
 const mystore = new Store<State, Props, Messages>();
 
