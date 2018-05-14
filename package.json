@@ -1,14 +1,14 @@
 {
   "name": "@wildpeaks/store",
   "version": "3.0.0-alpha1",
-  "description": "ActionsWorker class",
+  "description": "Store class",
   "author": "Cecile Muller",
   "license": "MIT",
   "eslintConfig": {
     "extends": "@wildpeaks/typescript"
   },
-  "main": "src/ActionsWorker.ts",
-  "types": "src/ActionsWorker.ts",
+  "main": "src/Store.ts",
+  "types": "src/Store.ts",
   "files": [
     "src"
   ],
@@ -25,16 +25,23 @@
     "url": "https://github.com/wildpeaks/package-store/issues"
   },
   "homepage": "https://github.com/wildpeaks/package-store#readme",
-  "peerDependencies": {
-    "typescript": "*"
-  },
   "devDependencies": {
     "@types/jasmine": "2.8.7",
     "@types/node": "6.0.110",
     "@wildpeaks/eslint-config-typescript": "4.8.0",
+    "@wildpeaks/webpack-config-web": "1.0.0",
     "eslint": "4.19.1",
+    "express": "4.16.3",
     "jasmine": "3.1.0",
+    "puppeteer": "1.4.0",
+    "recursive-readdir": "2.2.2",
+    "rimraf": "2.6.2",
+    "ts-loader": "4.3.0",
     "ts-node": "6.0.3",
-    "typescript": "2.8.3"
+    "typescript": "2.8.3",
+    "webpack": "4.8.2"
+  },
+  "peerDependencies": {
+    "typescript": "*"
   }
 }

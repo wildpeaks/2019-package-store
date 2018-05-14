@@ -1,140 +1,182 @@
-# ActionsWorker
+# Store
 
 [![Build Status](https://travis-ci.org/wildpeaks/package-store.svg?branch=master)](https://travis-ci.org/wildpeaks/package-store)
 
-Typescript class to store an **immutable state** that can be edited
-using **actions**, and **emits JSON props on state change**.
+Tiny Typescript class to store an **immutable state** that can be edited using **JSON messages** actions,
+and **emits JSON props on state change**.
 
-The `EntryLoader` uses it to generate a Web Worker automatically
-as part of the **JSON Entries system for Webpack**,
-but this package can also be used on its own, even without a Web Worker.
+It can be used with or without a Web Worker.
+
+When the state is replaced, it extracts JSON props to emit.
+That way, when the application state is managed in a Web Worker that emits props back to the main thread,
+only the data needed for rendering (the props) are sent to the UI thread.
+Also, it can avoid bothering the main thread if the state change is not significant enough that the props changed.
+
+Also, given actions and props are all JSON, the history of interactions could be recorded, replayed, and tested.
+
+See examples in the [/test/fixtures](https://github.com/wildpeaks/package-store/tree/master/test/fixtures) folder.
 
 
-Install:
+-------------------------------------------------------------------------------
 
-	npm install @wildpeaks/store
+## Actions
+
+Actions are functions that receive two parameters:
+ - the message: any JSON-encodable object as long as it has a string property `action`
+ - a reference to the Store
+
+The `IStore` store reference has two generics:
+ - your State type
+ - the type of additional messages it can schedule (or `never`)
+
+The `store.state` is used to read and modify.
+
+However, **only one (immediate) change is allowed per action**.
+Any additional or async changes should be actions scheduled using `store.schedule`.
 
 
-Example:
+---
+### Example
+
+Let's say we have an application with two actions:
+ - `log` that adds a line to a string[]
+ - `add` that increments a number
+
+The message types:
+
 ````ts
-import {ActionsWorker, IDispatcher} from '@wildpeaks/store';
+type LogMessage = Readonly<{
+	action: 'log';
+	text: string;
+}>;
 
+type AddMessage = Readonly<{
+	action: 'add';
+	toAdd: number;
+}>;
+````
 
-// The immutable state could be a simple frozen object, class instance, etc.
-// It's up to you.
-type State = {
-	readonly count: number;
+The `log` action only makes one change:
+
+````ts
+import {IStore} from '@wildpeaks/store';
+
+export type PartialState = {
+	messages: string[];
 };
 
-
-// Props must be a JSON-compatible frozen object.
-// This way, it could be forwarded from a Web Worker to the main thread
-// for rendering with React or Preact, for example.
-// Technically it doesn't have to be frozen, but it is assumed to be immutable.
-type Props = {
-	readonly text: string;
-};
-
-
-// String values are easier to debug.
-enum Actions {
-	ADD = 'add',
-	SUBTRACT = 'subtract'
+export function actionLog<State extends PartialState>(message: LogMessage, store: IStore<State, never>): void {
+	const oldState = store.state;
+	const newMessages = oldState.messages.concat([message.text]);
+	const newState = Object.assign({}, oldState, {messages: newMessages});
+	Object.freeze(newState); // optional
+	store.state = newState;
 }
+````
 
-// But you can use a classic integer enum as well.
-// enum Actions {
-// 	ADD,
-// 	SUBTRACT
-// }
+The `add` action makes one change and schedules two `log` actions:
 
+````ts
+import {IStore} from '@wildpeaks/store';
 
-// Each action has a matching data message.
-// The only requirement is property `action`.
-type AddMessage = {
-	action: Actions.ADD;
-	delta: number;
+export type PartialState = {
+	count: number;
 };
-type SubtractMessage = {
-	action: Actions.SUBTRACT;
-	delta: number;
-};
-type Messages = AddMessage | SubtractMessage;
-type Dispatcher = IDispatcher<State, Messages>;
+
+export function actionAdd<State extends PartialState>(message: AddMessage, store: IStore<State, LogMessage>): void {
+	const oldState = store.state;
+	const newState = Object.assign({}, oldState, {count: oldState.count + message.toAdd});
+	store.state = newState;
+
+	store.schedule({
+		action: 'log',
+		text: 'immediately after'
+	});
+
+	setTimeout(() => {
+		store.schedule({
+			action: 'log',
+			text: '250ms after'
+		});
+	}, 250);
+}
+````
+
+Note how `PartialState` is used to specify only the parts of State that the action relies on.
+This way, the action could be used with multiple State types as long as they include the properties that the action relies on.
 
 
-// Actions are simple functions with two arguments:
-// - the data message
-// - a reference to read/write the new state & scheduled additional actions.
-//
-// Note that package `@wildpeaks/frozen` makes it simpler to manipulate
-// frozen objects, if the following is too verbose.
-function add(message: AddMessage, dispatcher: Dispatcher): void {
-	const oldState: State = dispatcher.state;
-	const newState: State = {
-		count: oldState.count + message.delta
+-------------------------------------------------------------------------------
+
+## Store
+
+The `Store` class takes three genercs:
+ - State type of the data it stores
+ - Props type of the JSON it emits
+ - Messages of actions it might receive
+
+Main properties:
+ - `store.register` adds an action
+ - `store.unregister` removes an action
+ - `store.schedule` receives messages
+ - `store.onprops` is called when props have changed
+ - `store.state` reads and replaces the current immutable state
+ - `store.serialize` is a functional method that generates the Props matching an arbitrary State value
+
+
+### Example
+
+Let's continue the example that has two actions (`log` and `add`).
+Now that the actions and messages are defined, time to create a Store and use it.
+
+````ts
+// Internal state in the webworker
+type State = Readonly<{
+	count: number;
+	messages: string[];
+}>;
+
+// JSON sent to the main thread
+type Props = Readonly<{
+	text1: string;
+	text2: string;
+}>;
+
+// Create the Store instance
+type Messages = LogMessage | AddMessage;
+const mystore = new Store<State, Props, Messages>();
+
+// Register actions
+mystore.register('log', actionLog);
+mystore.register('add', actionAdd);
+
+// Converts State to Props
+mystore.serialize = state => {
+	const props: Props = {
+		text1: `Count is ${state.count}`,
+		text2: `There are ${state.messages.length} lines`
 	};
-	dispatcher.state = Object.freeze(newState);
-
-	// Actions are only allowed ONE immediate change to the state.
-	// It must schedule any delayed or additional changes using `dispatcher.schedule`.
-}
-
-function subtract(message: SubtractMessage, dispatcher: Dispatcher): void {
-	const oldState: State = dispatcher.state;
-	const newState: State = {
-		count: oldState.count - message.delta
-	};
-	dispatcher.state = Object.freeze(newState);
-}
-
-
-// Subclass the ActionsWorker class to specify the list of actions
-// and the way to extract render Props from State (using `serialize`).
-class Storage extends ActionsWorker<Props, State, Messages> {
-	constructor() {
-		super();
-		this.actions[Actions.ADD] = add;
-		this.actions[Actions.SUBTRACT] = subtract;
-	}
-	protected serialize(state: State): Props {
-		const props: Props = {
-			text: `Count is ${state.count}`
-		};
-		Object.freeze(props);
-		return props;
-	}
-}
-
-
-const store = new Storage();
-
-// Receives the results of serialize(state),
-// ready to be rendered by React or Preact for example.
-store.onprops = props => {
-	console.log(props);
+	Object.freeze(props); // optional
+	return props;
 };
 
-// Initial state
-store.state = {
-	count: 0
+// Subscribe to props
+mystore.onprops = props => {
+	console.log('Render', props);
 };
 
-// Trigger actions by pushing to the queue.
-// The dispatcher that actions receive also has the `schedule` method.
-// Messages are JSON-compatible, so the storage could be in a WebWorker
-// while the messages are sent from the main thread.
-// They could also be recorded for playback.
-store.schedule({
-	action: Actions.ADD,
-	delta: 1
-});
-store.schedule({
-	action: Actions.ADD,
-	delta: 10
-});
-store.schedule({
-	action: Actions.SUBTRACT,
-	delta: 200
+// Set the initial state
+mystore.state = {
+	count: 123,
+	messages: [
+		'Initial message 1',
+		'Initial message 2'
+	]
+};
+
+// Send an action
+mystore.schedule({
+	action: 'log',
+	text: 'Hello'
 });
 ````
