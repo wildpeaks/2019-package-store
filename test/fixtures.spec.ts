@@ -129,3 +129,53 @@ it('Basic', async() => {
 		await browser.close();
 	}
 });
+
+
+it('Webworker', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './webworker/myapp.ts'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map',
+		'store.webworker.js',
+		'store.webworker.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+
+		await page.goto('http://localhost:8888/');
+		await sleep(1000);
+
+		// Same as single-thread fixture
+		const expected = [
+			{text1: 'Count: 2000', text2: 'Lines: Initial message 1,Initial message 2'},
+			{text1: 'Count: 2001', text2: 'Lines: Initial message 1,Initial message 2'},
+			{text1: 'Count: 2001', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1,[immediately after] COUNT 2001 + 10'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1,[immediately after] COUNT 2001 + 10,Hello Formatted'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1,[immediately after] COUNT 2001 + 10,Hello Formatted,Hello JSON'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1,[immediately after] COUNT 2001 + 10,Hello Formatted,Hello JSON,[250ms after] COUNT 2000 + 1'},
+			{text1: 'Count: 2011', text2: 'Lines: Initial message 1,Initial message 2,[immediately after] COUNT 2000 + 1,[immediately after] COUNT 2001 + 10,Hello Formatted,Hello JSON,[250ms after] COUNT 2000 + 1,[250ms after] COUNT 2001 + 10'}
+		];
+		expect(actual).toEqual(expected, 'Props');
+	} finally {
+		await browser.close();
+	}
+});
