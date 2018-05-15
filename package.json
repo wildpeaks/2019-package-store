@@ -5,7 +5,12 @@
   "author": "Cecile Muller",
   "license": "MIT",
   "eslintConfig": {
-    "extends": "@wildpeaks/typescript"
+    "extends": "@wildpeaks/typescript",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    }
   },
   "main": "src/Store.ts",
   "types": "src/Store.ts",
@@ -33,6 +38,7 @@
     "eslint": "4.19.1",
     "express": "4.16.3",
     "jasmine": "3.1.0",
+    "preact": "8.2.9",
     "puppeteer": "1.4.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "2.6.2",
