@@ -109,7 +109,6 @@ it('Basic', async() => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
-
 		await page.goto('http://localhost:8888/');
 		await sleep(1000);
 
@@ -158,7 +157,6 @@ it('Webworker', async() => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
-
 		await page.goto('http://localhost:8888/');
 		await sleep(1000);
 
@@ -177,5 +175,75 @@ it('Webworker', async() => {
 		expect(actual).toEqual(expected, 'Props');
 	} finally {
 		await browser.close();
+	}
+});
+
+
+it('Shared action', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			first: './shared/app1.ts',
+			second: './shared/app2.ts'
+		},
+		pages: [
+			{filename: 'first.html', chunks: ['first']},
+			{filename: 'second.html', chunks: ['second']}
+		]
+	});
+	const expectedFiles = [
+		'first.html',
+		'first.js',
+		'first.js.map',
+		'second.html',
+		'second.js',
+		'second.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser1 = await puppeteer.launch();
+	try {
+		const page = await browser1.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/first.html');
+		await sleep(1000);
+
+		const expected = [
+			{first: 'Count: 1000, Hello: FIRST APP'},
+			{first: 'Count: 1001, Hello: FIRST APP'},
+			{first: 'Count: 1011, Hello: FIRST APP'}
+		];
+		expect(actual).toEqual(expected, 'Props (first)');
+	} finally {
+		await browser1.close();
+	}
+
+	const browser2 = await puppeteer.launch();
+	try {
+		const page = await browser2.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/second.html');
+		await sleep(1000);
+
+		const expected = [
+			{second: 'Count: 2000, Hello: second app'},
+			{second: 'Count: 2002, Hello: second app'},
+			{second: 'Count: 2022, Hello: second app'}
+		];
+		expect(actual).toEqual(expected, 'Props (second)');
+	} finally {
+		await browser2.close();
 	}
 });
