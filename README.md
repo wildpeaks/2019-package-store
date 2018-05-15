@@ -1,6 +1,6 @@
 # Store
 
-[![Build Status](https://travis-ci.org/wildpeaks/package-actions-worker.svg?branch=master)](https://travis-ci.org/wildpeaks/package-actions-worker)
+[![Build Status](https://travis-ci.org/wildpeaks/package-store.svg?branch=master)](https://travis-ci.org/wildpeaks/package-store)
 
 Tiny Typescript class to store an **immutable state** that can be edited using **JSON messages** actions,
 and **emits JSON props on state change**.
@@ -119,11 +119,14 @@ Store methods:
  - `store.register` adds an action
  - `store.unregister` removes an action
  - `store.schedule` receives messages
+
+Store callbacks:
  - `store.serialize` generates a Props object given an arbitrary State
+ - `store.onprops` is called when props have changed
 
 Store properties:
  - `store.state` reads and replaces the current immutable state
- - `store.onprops` is called when props have changed
+ - `store.props` reads and replaces the current JSON props
 
 
 ### Example

@@ -1,6 +1,6 @@
 {
   "name": "@wildpeaks/store",
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0-alpha2",
   "description": "Tiny Typescript class to store an immutable State edited by JSON message and emitting JSON props",
   "author": "Cecile Muller",
   "license": "MIT",
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
     "@types/jasmine": "2.8.7",
-    "@types/node": "6.0.110",
+    "@types/node": "10.0.9",
     "@wildpeaks/eslint-config-typescript": "4.8.0",
     "@wildpeaks/webpack-config-web": "1.0.0",
     "eslint": "4.19.1",
@@ -39,7 +39,7 @@
     "ts-loader": "4.3.0",
     "ts-node": "6.0.3",
     "typescript": "2.8.3",
-    "webpack": "4.8.2"
+    "webpack": "4.8.3"
   },
   "peerDependencies": {
     "typescript": "*"

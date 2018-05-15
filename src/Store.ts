@@ -28,11 +28,12 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 		return this._state;
 	}
 	public set state(newState: Readonly<TState>) {
-		if (this.serialize){
-			const props = this.serialize(newState);
-			this._state = newState;
-			this.props = props;
+		if (typeof this.serialize !== 'function'){
+			throw new Error('Missing serializer');
 		}
+		const props = this.serialize(newState);
+		this._state = newState;
+		this.props = props;
 	}
 
 	/**
@@ -70,27 +71,15 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 
 
 	/**
-	 * Forwards a message to the Worker messages queue.
+	 * Receives action messages.
 	 */
 	public schedule(message: Readonly<TMessage>): void {
-		this.onmessage({data: message});
-	}
-
-	/**
-	 * Receives messages from the main thread or from within the Worker.
-	 */
-	public onmessage(event: {data: Readonly<TMessage> | null | undefined}): void {
-		const {data} = event;
-		if (data && (data !== null)){
-			const actionId = data.action;
-			if (actionId in this.actions){
-				const action = this.actions[actionId];
-				action(data, this);
-			} else {
-				throw new Error('Unknown action');
-			}
+		const actionId = message.action;
+		if (actionId in this.actions){
+			const action = this.actions[actionId];
+			action(message, this);
 		} else {
-			throw new Error('Message is not an action');
+			throw new Error('Unknown action');
 		}
 	}
 }
