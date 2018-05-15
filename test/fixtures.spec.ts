@@ -290,3 +290,76 @@ it('Multiple Stores', async() => {
 		await browser.close();
 	}
 });
+
+
+it('Preact Render', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './preact-render/myapp.tsx'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+		await page.goto('http://localhost:8888/');
+		await sleep(200);
+
+		const result1 = await page.evaluate(() => {
+			/* global document */
+			const el = document.getElementById('hello');
+			if (el === null){
+				return '#hello not found';
+			}
+			if (el.innerHTML !== '<div style="color: green;">Title is Count: 2000</div>'){
+				return `Bad #hello.innerHTML: ${el.innerHTML}`;
+			}
+			return 'ok';
+		});
+		expect(result1).toBe('ok', 'Before @add');
+
+		const result2 = await page.evaluate(() => {
+			let throws = false;
+			try {
+				// @ts-ignore
+				window.PUPPETEER_STORE.schedule({
+					action: 'add',
+					toAdd: 123
+				});
+			} catch(e){
+				throws = e;
+			}
+			if (throws !== false){
+				return `Action throws: ${throws}`;
+			}
+			return 'ok';
+		});
+		expect(result2).toBe('ok', 'Called @add');
+
+		await sleep(200);
+		const result3 = await page.evaluate(() => {
+			/* global document */
+			const el = document.getElementById('hello');
+			if (el === null){
+				return '#hello not found';
+			}
+			if (el.innerHTML !== '<div style="color: green;">Title is Count: 2123</div>'){
+				return `Bad #hello.innerHTML: ${el.innerHTML}`;
+			}
+			return 'ok';
+		});
+		expect(result3).toBe('ok', 'After @add');
+
+	} finally {
+		await browser.close();
+	}
+});

@@ -16,6 +16,8 @@
 		"module": "esnext",
 		"target": "es5",
 		"lib": ["es2017", "dom"],
-		"allowJs": true
+		"allowJs": true,
+		"jsx": "react",
+		"jsxFactory": "h"
 	}
 }
