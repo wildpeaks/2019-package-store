@@ -247,3 +247,46 @@ it('Shared action', async() => {
 		await browser2.close();
 	}
 });
+
+
+it('Multiple Stores', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './multiple/myapp.ts'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/');
+		await sleep(1000);
+
+		const expected: any[] = [
+			{first: 'Count: 123'},
+			{second: 'Text: Initial message 1, Initial message 2'},
+			{first: 'Count: 124'},
+			{second: 'Text: Initial message 1, Initial message 2, Hello'},
+			{first: 'Count: 134'},
+			{second: 'Text: Initial message 1, Initial message 2, Hello, World'}
+		];
+		expect(actual).toEqual(expected, 'Props');
+	} finally {
+		await browser.close();
+	}
+});
