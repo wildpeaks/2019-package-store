@@ -119,11 +119,14 @@ Store methods:
  - `store.register` adds an action
  - `store.unregister` removes an action
  - `store.schedule` receives messages
+
+Store callbacks:
  - `store.serialize` generates a Props object given an arbitrary State
+ - `store.onprops` is called when props have changed
 
 Store properties:
  - `store.state` reads and replaces the current immutable state
- - `store.onprops` is called when props have changed
+ - `store.props` reads and replaces the current JSON props
 
 
 ### Example
