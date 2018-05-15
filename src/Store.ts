@@ -28,11 +28,12 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 		return this._state;
 	}
 	public set state(newState: Readonly<TState>) {
-		if (this.serialize){
-			const props = this.serialize(newState);
-			this._state = newState;
-			this.props = props;
+		if (typeof this.serialize !== 'function'){
+			throw new Error('Missing serializer');
 		}
+		const props = this.serialize(newState);
+		this._state = newState;
+		this.props = props;
 	}
 
 	/**
