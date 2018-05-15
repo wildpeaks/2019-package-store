@@ -1,6 +1,6 @@
 # Store
 
-[![Build Status](https://travis-ci.org/wildpeaks/package-actions-worker.svg?branch=master)](https://travis-ci.org/wildpeaks/package-actions-worker)
+[![Build Status](https://travis-ci.org/wildpeaks/package-store.svg?branch=master)](https://travis-ci.org/wildpeaks/package-store)
 
 Tiny Typescript class to store an **immutable state** that can be edited using **JSON messages** actions,
 and **emits JSON props on state change**.
