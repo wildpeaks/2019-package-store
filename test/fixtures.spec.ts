@@ -10,17 +10,11 @@ const rreaddir = require('recursive-readdir');
 const puppeteer = require('puppeteer');
 const getWebpackConfig = require('@wildpeaks/webpack-config-web');
 
-
-// const getConfig = require('..');
 const rootFolder = join(__dirname, 'fixtures');
 const outputFolder = join(__dirname, '../out');
 let app: any;
 let server: any;
 
-
-/**
- * @param duration
- */
 function sleep(duration: number): Promise<void> {
 	return new Promise(resolve => {
 		setTimeout(() => {
@@ -29,10 +23,6 @@ function sleep(duration: number): Promise<void> {
 	});
 }
 
-
-/**
- * @param config
- */
 function compile(config: any): Promise<any> {
 	return new Promise((resolve, reject) => {
 		webpack(config, (err: any, stats: any) => {
@@ -45,11 +35,6 @@ function compile(config: any): Promise<any> {
 	});
 }
 
-
-/**
- * @param options
- * @returns {String[]}
- */
 async function testFixture(options: any): Promise<string[]> {
 	const config = getWebpackConfig(options);
 	expect(typeof options).toBe('object');
@@ -61,7 +46,6 @@ async function testFixture(options: any): Promise<string[]> {
 	actualFiles = actualFiles.map(filepath => relative(outputFolder, filepath).replace(/\\/g, '/'));
 	return actualFiles;
 }
-
 
 beforeAll(() => {
 	app = express();
@@ -359,6 +343,130 @@ it('Preact Render', async() => {
 		});
 		expect(result3).toBe('ok', 'After @add');
 
+	} finally {
+		await browser.close();
+	}
+});
+
+
+it('Collection', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './collection/myapp.ts'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/');
+		await sleep(1000);
+
+		const expected: any[] = [
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'}
+			},
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'},
+				new1: {position: '4 0 0'}
+			},
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'},
+				new1: {position: '4 0 0'},
+				new2: {position: '5 0 0'}
+			}
+		];
+		expect(actual).toEqual(expected, 'Props');
+	} finally {
+		await browser.close();
+	}
+});
+
+
+it('Nested Collection', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './nested/myapp.ts'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/');
+		await sleep(1000);
+
+		const expected: any[] = [
+			{
+				selected: '',
+				ids: ['initial1', 'initial2', 'initial3']
+			},
+			{
+				selected: 'initial2',
+				ids: ['initial1', 'initial2', 'initial3'],
+				viewpoint: {
+					position: '2 0 0'
+				}
+			},
+			{
+				selected: 'initial2',
+				ids: ['initial1', 'initial2', 'initial3', 'new1'],
+				viewpoint: {
+					position: '2 0 0'
+				}
+			},
+			{
+				selected: 'initial2',
+				ids: ['initial1', 'initial2', 'initial3', 'new1', 'new2'],
+				viewpoint: {
+					position: '2 0 0'
+				}
+			},
+			{
+				selected: 'new1',
+				ids: ['initial1', 'initial2', 'initial3', 'new1', 'new2'],
+				viewpoint: {
+					position: '4 0 0'
+				}
+			}
+		];
+		expect(actual).toEqual(expected, 'Props');
 	} finally {
 		await browser.close();
 	}
