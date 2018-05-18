@@ -363,3 +363,58 @@ it('Preact Render', async() => {
 		await browser.close();
 	}
 });
+
+
+it('Collection', async() => {
+	const actualFiles = await testFixture({
+		rootFolder,
+		outputFolder,
+		mode: 'development',
+		entry: {
+			myapp: './collection/myapp.ts'
+		}
+	});
+	const expectedFiles = [
+		'index.html',
+		'myapp.js',
+		'myapp.js.map'
+	];
+	expect(actualFiles.sort()).toEqual(expectedFiles.sort());
+
+	const browser = await puppeteer.launch();
+	try {
+		const page = await browser.newPage();
+
+		const actual: any[] = [];
+		await page.exposeFunction('PUPPETER_ON_PROPS', (stringified: string) => {
+			const parsed = JSON.parse(stringified);
+			actual.push(parsed);
+		});
+		await page.goto('http://localhost:8888/');
+		await sleep(1000);
+
+		const expected: any[] = [
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'}
+			},
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'},
+				new1: {position: '4 0 0'}
+			},
+			{
+				initial1: {position: '1 0 0'},
+				initial2: {position: '2 0 0'},
+				initial3: {position: '3 0 0'},
+				new1: {position: '4 0 0'},
+				new2: {position: '5 0 0'}
+			}
+		];
+		expect(actual).toEqual(expected, 'Props');
+	} finally {
+		await browser.close();
+	}
+});
