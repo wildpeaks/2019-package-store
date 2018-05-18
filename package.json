@@ -1,6 +1,6 @@
 {
   "name": "@wildpeaks/store",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Tiny Typescript class to store an immutable State, edited by JSON messages, and emitting JSON props",
   "author": "Cecile Muller",
   "license": "MIT",
