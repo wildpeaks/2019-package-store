@@ -32,7 +32,7 @@
   "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
     "@types/jasmine": "2.8.11",
-    "@types/node": "10.12.7",
+    "@types/node": "10.12.8",
     "@wildpeaks/eslint-config-typescript": "5.2.0",
     "@wildpeaks/webpack-config-web": "2.0.9",
     "eslint": "5.8.0",
