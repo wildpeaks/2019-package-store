@@ -37,7 +37,7 @@
     "@wildpeaks/webpack-config-web": "2.0.11",
     "eslint": "5.9.0",
     "express": "4.16.4",
-    "jasmine": "3.3.0",
+    "jasmine": "3.3.1",
     "preact": "8.3.1",
     "puppeteer": "1.11.0",
     "recursive-readdir": "2.2.2",
