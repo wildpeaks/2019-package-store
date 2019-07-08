@@ -19,6 +19,7 @@
 !/.npmrc
 !/.travis.yml
 !/.vscode
+!/azure-pipelines.yml
 !/src
 !/test
 !/jasmine.typescript.js
