@@ -38,7 +38,7 @@
     "eslint": "6.1.0",
     "express": "4.17.1",
     "jasmine": "3.4.0",
-    "preact": "8.5.0",
+    "preact": "8.5.1",
     "puppeteer": "1.19.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "2.6.3",
