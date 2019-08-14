@@ -41,7 +41,7 @@
     "preact": "8.5.0",
     "puppeteer": "1.19.0",
     "recursive-readdir": "2.2.2",
-    "rimraf": "2.6.3",
+    "rimraf": "2.7.0",
     "ts-loader": "6.0.4",
     "ts-node": "8.3.0",
     "typescript": "3.5.3",
