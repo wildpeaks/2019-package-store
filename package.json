@@ -32,20 +32,20 @@
   "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
     "@types/jasmine": "3.4.0",
-    "@types/node": "12.7.4",
+    "@types/node": "12.7.5",
     "@wildpeaks/eslint-config-typescript": "7.0.0",
     "@wildpeaks/webpack-config-web": "4.3.0",
-    "eslint": "6.3.0",
+    "eslint": "6.4.0",
     "express": "4.17.1",
     "jasmine": "3.4.0",
     "preact": "8.5.2",
-    "puppeteer": "1.19.0",
+    "puppeteer": "1.20.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.0",
-    "ts-loader": "6.0.4",
-    "ts-node": "8.3.0",
-    "typescript": "3.5.3",
-    "webpack": "4.39.3"
+    "ts-loader": "6.1.0",
+    "ts-node": "8.4.1",
+    "typescript": "3.6.3",
+    "webpack": "4.40.2"
   },
   "peerDependencies": {
     "typescript": "*"
