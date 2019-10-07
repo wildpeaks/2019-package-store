@@ -29,7 +29,8 @@ container.appendChild(child);
 
 mystore.onprops = props => {
 	const component = h(Application, props);
-	render(component, container, container.firstChild as Element);
+	// render(component, container, container.firstChild as Element); // Preact 8
+	render(component, container); // Preact X
 };
 
 // Initial state

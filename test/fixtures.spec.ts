@@ -1,8 +1,10 @@
 /* eslint-env node, jasmine */
 /* eslint-disable max-len */
+/* global document */
+/* global window */
 'use strict';
 const {join, relative} = require('path');
-const {readFileSync, mkdirSync} = require('fs');
+const {mkdirSync} = require('fs');
 const express = require('express');
 const webpack = require('webpack');
 const rimraf = require('rimraf');
@@ -299,7 +301,6 @@ it('Preact Render', async() => {
 		await sleep(200);
 
 		const result1 = await page.evaluate(() => {
-			/* global document */
 			const el = document.getElementById('hello');
 			if (el === null){
 				return '#hello not found';
@@ -331,7 +332,6 @@ it('Preact Render', async() => {
 
 		await sleep(200);
 		const result3 = await page.evaluate(() => {
-			/* global document */
 			const el = document.getElementById('hello');
 			if (el === null){
 				return '#hello not found';
