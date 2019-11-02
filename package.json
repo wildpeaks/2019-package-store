@@ -42,7 +42,7 @@
     "puppeteer": "1.20.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.0",
-    "ts-loader": "6.2.0",
+    "ts-loader": "6.2.1",
     "ts-node": "8.4.1",
     "typescript": "3.6.3",
     "webpack": "4.41.2"
