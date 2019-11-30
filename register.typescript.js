@@ -1,4 +1,4 @@
-// Typescript compiler for Jasmine CLI in non-Wallaby mode
+'use strict';
 require('ts-node').register({
 	ignore: false,
 	compilerOptions: {
