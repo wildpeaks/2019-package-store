@@ -12,13 +12,19 @@
       }
     }
   },
+  "greenkeeper": {
+    "commitMessages": {
+      "dependencyUpdate": "fix: Update ${dependency}",
+      "devDependencyUpdate": "chore: Update ${dependency}"
+    }
+  },
   "main": "src/Store.ts",
   "types": "src/Store.ts",
   "files": [
     "src"
   ],
   "scripts": {
-    "test": "jasmine --helper=jasmine.typescript.js test/*.spec.ts"
+    "test": "jasmine --helper=register.typescript.js test/*.spec.ts"
   },
   "repository": "https://github.com/wildpeaks/package-store",
   "keywords": [
@@ -31,11 +37,12 @@
   },
   "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
-    "@types/jasmine": "3.4.6",
-    "@types/node": "12.12.10",
+    "@types/jasmine": "3.5.0",
+    "@types/node": "12.12.14",
     "@wildpeaks/eslint-config-typescript": "7.2.0",
+    "@wildpeaks/tsconfig-web": "1.0.0",
     "@wildpeaks/webpack-config-web": "4.9.0",
-    "eslint": "6.6.0",
+    "eslint": "6.7.1",
     "express": "4.17.1",
     "jasmine": "3.5.0",
     "preact": "10.0.5",
@@ -43,8 +50,8 @@
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.0",
     "ts-loader": "6.2.1",
-    "ts-node": "8.5.2",
-    "typescript": "3.6.4",
+    "ts-node": "8.5.4",
+    "typescript": "3.7.2",
     "webpack": "4.41.2"
   },
   "peerDependencies": {

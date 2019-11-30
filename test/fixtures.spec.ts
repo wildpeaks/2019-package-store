@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 /* global document */
 /* global window */
-'use strict';
+/// <reference types="jasmine" />
 const {join, relative} = require('path');
 const {mkdirSync} = require('fs');
 const express = require('express');

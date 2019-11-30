@@ -17,15 +17,13 @@
 !/.gitattributes
 !/.gitignore
 !/.npmrc
-!/.travis.yml
 !/.vscode
 !/azure-pipelines.yml
 !/src
 !/test
-!/jasmine.typescript.js
+!/register.typescript.js
 !/tsconfig.json
 !/package.json
-!/wallaby.js
 
 #-----------------------------------------------------------------------------#
 # But make sure to ignore those regardless:
@@ -33,3 +31,4 @@
 
 .DS_Store
 Thumbs.db
+WAS *

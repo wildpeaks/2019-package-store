@@ -1,4 +1,5 @@
 /* eslint-env node, jasmine */
+/// <reference types="jasmine" />
 import {Store, IStore} from '..';
 
 type Props = Readonly<{
