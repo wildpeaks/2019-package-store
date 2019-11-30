@@ -1,6 +1,6 @@
 {
-	"commitMessages": {
-		"dependencyUpdate": "fix: Update ${dependency}",
-		"devDependencyUpdate": "chore: Update ${dependency}"
-	}
+  "commitMessages": {
+    "dependencyUpdate": "fix: Update ${dependency}",
+    "devDependencyUpdate": "chore: Update ${dependency}"
+  }
 }
