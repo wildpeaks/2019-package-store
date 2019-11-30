@@ -12,6 +12,12 @@
       }
     }
   },
+  "greenkeeper": {
+    "commitMessages": {
+      "dependencyUpdate": "fix: Update ${dependency}",
+      "devDependencyUpdate": "chore: Update ${dependency}"
+    }
+  },
   "main": "src/Store.ts",
   "types": "src/Store.ts",
   "files": [

@@ -22,7 +22,6 @@
 !/src
 !/test
 !/register.typescript.js
-!/greenkeeper.json
 !/tsconfig.json
 !/package.json
 
