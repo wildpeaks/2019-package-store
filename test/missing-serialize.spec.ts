@@ -1,4 +1,5 @@
 /* eslint-env node, jasmine */
+/// <reference types="jasmine" />
 import {Store} from '..';
 
 type Props = Readonly<{
@@ -11,7 +12,7 @@ type State = Readonly<{
 	selected: string;
 	results: Readonly<{
 		[key: string]: string;
-	}>
+	}>;
 }>;
 
 type DummyMessage = {

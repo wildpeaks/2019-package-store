@@ -1,4 +1,5 @@
 /* eslint-env node, jasmine */
+/// <reference types="jasmine" />
 import {Store, IStore} from '..';
 
 type Props = Readonly<{
@@ -11,7 +12,7 @@ type State = Readonly<{
 	selected: string;
 	results: Readonly<{
 		[key: string]: string;
-	}>
+	}>;
 }>;
 
 
@@ -20,7 +21,7 @@ type SelectMessage = {
 	id: string;
 };
 type DownloadMessage = {
-	action: 'download'
+	action: 'download';
 };
 type ParseMessage = {
 	action: 'parse';

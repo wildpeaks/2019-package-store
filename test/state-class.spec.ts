@@ -1,4 +1,5 @@
 /* eslint-env node, jasmine */
+/// <reference types="jasmine" />
 import {Store, IStore} from '..';
 
 type Props = Readonly<{
@@ -8,16 +9,16 @@ type Props = Readonly<{
 class StateClass {
 	public mynumber: number = 0;
 	public mystring: string = 'hello';
-	constructor(fromState?: StateClass) {
+	public constructor(fromState?: StateClass) {
 		if (fromState){
 			this.mynumber = fromState.mynumber;
 			this.mystring = fromState.mystring;
 		}
 	}
-	increase(delta: number = 1): void {
+	public increase(delta: number = 1): void {
 		this.mynumber += delta;
 	}
-	hello(): void {
+	public hello(): void {
 		this.mystring = 'hello';
 	}
 }
