@@ -1,3 +1,6 @@
 {
-	"extends": "@wildpeaks/tsconfig-web"
+	"extends": "@wildpeaks/tsconfig-web",
+	"compilerOptions": {
+		"useDefineForClassFields": false
+	}
 }
