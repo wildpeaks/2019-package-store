@@ -14,7 +14,7 @@
   },
   "greenkeeper": {
     "commitMessages": {
-      "dependencyUpdate": "fix: update ${dependency}",
+      "dependencyUpdate": "feat: update ${dependency}",
       "devDependencyUpdate": "chore: update ${dependency}"
     }
   },
