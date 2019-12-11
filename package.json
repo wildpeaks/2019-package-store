@@ -14,8 +14,8 @@
   },
   "greenkeeper": {
     "commitMessages": {
-      "dependencyUpdate": "fix: Update ${dependency}",
-      "devDependencyUpdate": "chore: Update ${dependency}"
+      "dependencyUpdate": "fix: update ${dependency}",
+      "devDependencyUpdate": "chore: update ${dependency}"
     }
   },
   "main": "src/Store.ts",
