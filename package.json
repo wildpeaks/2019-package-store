@@ -14,8 +14,8 @@
   },
   "greenkeeper": {
     "commitMessages": {
-      "dependencyUpdate": "fix: Update ${dependency}",
-      "devDependencyUpdate": "chore: Update ${dependency}"
+      "dependencyUpdate": "feat: update ${dependency}",
+      "devDependencyUpdate": "chore: update ${dependency}"
     }
   },
   "main": "src/Store.ts",
@@ -38,14 +38,14 @@
   "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
     "@types/jasmine": "3.5.0",
-    "@types/node": "12.12.14",
-    "@wildpeaks/eslint-config-typescript": "7.2.0",
-    "@wildpeaks/tsconfig-web": "1.0.0",
+    "@types/node": "12.12.17",
+    "@wildpeaks/eslint-config-typescript": "7.3.0",
+    "@wildpeaks/tsconfig-web": "1.1.0",
     "@wildpeaks/webpack-config-web": "4.11.0",
     "eslint": "6.7.2",
     "express": "4.17.1",
     "jasmine": "3.5.0",
-    "preact": "10.0.5",
+    "preact": "10.1.0",
     "puppeteer": "2.0.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.0",

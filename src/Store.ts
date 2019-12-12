@@ -12,9 +12,7 @@ export type TAction<TState, TReceives extends IMessage, TEmits extends IMessage>
 	dispatcher: IStore<TState, TEmits>
 ) => void;
 
-
 export class Store<TState, TProps, TMessage extends IMessage> implements IStore<TState, TMessage> {
-
 	/**
 	 * Converts state to props.
 	 */
@@ -49,7 +47,8 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 		return this._props;
 	}
 	public set props(newProps: Readonly<TProps>) {
-		const hasChanged = JSON.stringify(newProps) !== JSON.stringify(this.props); // @quickhack Not the cleanest "deep strict equal"
+		// @quickhack Not the cleanest "deep strict equal"
+		const hasChanged = JSON.stringify(newProps) !== JSON.stringify(this.props);
 		if (hasChanged){
 			this._props = newProps;
 			if (this.onprops){
@@ -58,17 +57,18 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 		}
 	}
 
-
 	private actions: {
 		[actionId: string]: TAction<TState, any, any>;
 	} = {};
-	public register(id: string, action: TAction<TState, IMessage, IMessage | never>): void {
+	public register(
+		id: string,
+		action: TAction<TState, IMessage, IMessage | never>
+	): void {
 		this.actions[id] = action;
 	}
 	public unregister(id: string): void {
 		delete this.actions[id];
 	}
-
 
 	/**
 	 * Receives action messages.
@@ -84,15 +84,13 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 	}
 }
 
-
 /* eslint-disable class-methods-use-this */
 export class StoreWorker<TProps, TMessage extends IMessage> {
-
 	/**
 	 * Webworker that can receive actions and emits props.
 	 */
 	private worker: Worker;
-	constructor(worker: Worker) {
+	public constructor(worker: Worker) {
 		this.worker = worker;
 		worker.onmessage = this.onmessage.bind(this);
 	}
@@ -113,7 +111,7 @@ export class StoreWorker<TProps, TMessage extends IMessage> {
 	 * Receives messages from the webworker.
 	 * @param response
 	 */
-	private onmessage(response: {data: TProps}): void {
+	private onmessage(response: {data: TProps;}): void {
 		if (this.onprops){
 			this.onprops(response.data);
 		}
