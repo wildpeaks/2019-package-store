@@ -12,6 +12,12 @@
       }
     }
   },
+  "prettier": {
+    "printWidth": 120,
+    "tabWidth": 4,
+    "useTabs": true,
+    "bracketSpacing": false
+  },
   "greenkeeper": {
     "commitMessages": {
       "dependencyUpdate": "feat: update ${dependency}",
@@ -46,6 +52,7 @@
     "express": "4.17.1",
     "jasmine": "3.5.0",
     "preact": "10.1.1",
+    "prettier": "1.19.1",
     "puppeteer": "2.0.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.0",
