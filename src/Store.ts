@@ -26,8 +26,8 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 		return this._state;
 	}
 	public set state(newState: Readonly<TState>) {
-		if (typeof this.serialize !== 'function'){
-			throw new Error('Missing serializer');
+		if (typeof this.serialize !== "function") {
+			throw new Error("Missing serializer");
 		}
 		const props = this.serialize(newState);
 		this._state = newState;
@@ -49,9 +49,9 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 	public set props(newProps: Readonly<TProps>) {
 		// @quickhack Not the cleanest "deep strict equal"
 		const hasChanged = JSON.stringify(newProps) !== JSON.stringify(this.props);
-		if (hasChanged){
+		if (hasChanged) {
 			this._props = newProps;
-			if (this.onprops){
+			if (this.onprops) {
 				this.onprops(newProps);
 			}
 		}
@@ -60,10 +60,7 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 	private actions: {
 		[actionId: string]: TAction<TState, any, any>;
 	} = {};
-	public register(
-		id: string,
-		action: TAction<TState, IMessage, IMessage | never>
-	): void {
+	public register(id: string, action: TAction<TState, IMessage, IMessage | never>): void {
 		this.actions[id] = action;
 	}
 	public unregister(id: string): void {
@@ -75,11 +72,11 @@ export class Store<TState, TProps, TMessage extends IMessage> implements IStore<
 	 */
 	public schedule(message: Readonly<TMessage>): void {
 		const actionId = message.action;
-		if (actionId in this.actions){
+		if (actionId in this.actions) {
 			const action = this.actions[actionId];
 			action(message, this);
 		} else {
-			throw new Error('Unknown action');
+			throw new Error("Unknown action");
 		}
 	}
 }
@@ -111,8 +108,8 @@ export class StoreWorker<TProps, TMessage extends IMessage> {
 	 * Receives messages from the webworker.
 	 * @param response
 	 */
-	private onmessage(response: {data: TProps;}): void {
-		if (this.onprops){
+	private onmessage(response: {data: TProps}): void {
+		if (this.onprops) {
 			this.onprops(response.data);
 		}
 	}
