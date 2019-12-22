@@ -1,7 +1,8 @@
-'use strict';
-require('ts-node').register({
+"use strict";
+
+require("ts-node").register({
 	ignore: false,
 	compilerOptions: {
-		module: 'CommonJS'
+		module: "CommonJS"
 	}
 });
