@@ -4,6 +4,16 @@
   "description": "Tiny Typescript class to store an immutable State, edited by JSON messages, and emitting JSON props",
   "author": "Cecile Muller",
   "license": "MIT",
+  "keywords": [
+    "wildpeaks",
+    "typescript",
+    "actions"
+  ],
+  "homepage": "https://github.com/wildpeaks/package-store#readme",
+  "repository": "https://github.com/wildpeaks/package-store",
+  "bugs": {
+    "url": "https://github.com/wildpeaks/package-store/issues"
+  },
   "eslintConfig": {
     "extends": "@wildpeaks/typescript",
     "parserOptions": {
@@ -32,16 +42,9 @@
   "scripts": {
     "test": "jasmine --helper=register.typescript.js test/*.spec.ts"
   },
-  "repository": "https://github.com/wildpeaks/package-store",
-  "keywords": [
-    "wildpeaks",
-    "typescript",
-    "actions"
-  ],
-  "bugs": {
-    "url": "https://github.com/wildpeaks/package-store/issues"
+  "peerDependencies": {
+    "typescript": "*"
   },
-  "homepage": "https://github.com/wildpeaks/package-store#readme",
   "devDependencies": {
     "@types/jasmine": "3.5.0",
     "@types/node": "12.12.21",
@@ -60,8 +63,5 @@
     "ts-node": "8.5.4",
     "typescript": "3.7.3",
     "webpack": "4.41.4"
-  },
-  "peerDependencies": {
-    "typescript": "*"
   }
 }
