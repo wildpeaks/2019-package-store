@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@types/jasmine": "3.5.2",
-    "@types/node": "13.5.3",
+    "@types/node": "13.7.0",
     "@wildpeaks/eslint-config-typescript": "8.0.0",
     "@wildpeaks/tsconfig-web": "2.0.0",
     "@wildpeaks/webpack-config-web": "4.14.0",
