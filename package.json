@@ -46,22 +46,22 @@
     "typescript": "*"
   },
   "devDependencies": {
-    "@types/jasmine": "3.5.0",
-    "@types/node": "13.1.7",
+    "@types/jasmine": "3.5.2",
+    "@types/node": "13.5.3",
     "@wildpeaks/eslint-config-typescript": "8.0.0",
     "@wildpeaks/tsconfig-web": "2.0.0",
     "@wildpeaks/webpack-config-web": "4.14.0",
     "eslint": "6.8.0",
     "express": "4.17.1",
     "jasmine": "3.5.0",
-    "preact": "10.1.1",
+    "preact": "10.2.1",
     "prettier": "1.19.1",
-    "puppeteer": "2.0.0",
+    "puppeteer": "2.1.0",
     "recursive-readdir": "2.2.2",
-    "rimraf": "3.0.0",
+    "rimraf": "3.0.1",
     "ts-loader": "6.2.1",
     "ts-node": "8.6.2",
-    "typescript": "3.7.4",
+    "typescript": "3.7.5",
     "webpack": "4.41.5"
   }
 }
