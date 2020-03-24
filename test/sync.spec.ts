@@ -36,7 +36,7 @@ function actionSubtract<State extends PartialState>(message: SubtractMessage, st
 }
 
 function sleep(delay: number = 1): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, delay);
@@ -48,7 +48,7 @@ it("Sync Actions", async () => {
 	const store = new Store<State, Props, AddMessage | SubtractMessage>();
 	store.register("add", actionAdd);
 	store.register("subtract", actionSubtract);
-	store.serialize = state => {
+	store.serialize = (state) => {
 		const props: Props = {
 			value: `Count is ${state.count}`
 		};

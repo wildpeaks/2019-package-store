@@ -36,7 +36,7 @@ function actionAdd(message: AddMessage, store: IStore<StateClass, never>): void 
 }
 
 function sleep(delay: number = 1): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, delay);
@@ -46,7 +46,7 @@ function sleep(delay: number = 1): Promise<void> {
 it("State as Class", async () => {
 	const store = new Store<StateClass, Props, AddMessage>();
 	store.register("add", actionAdd);
-	store.serialize = state => {
+	store.serialize = (state) => {
 		const props: Props = {
 			value: `Number is ${state.mynumber}, String is ${state.mystring}`
 		};

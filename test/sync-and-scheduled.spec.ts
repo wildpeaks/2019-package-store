@@ -74,7 +74,7 @@ function actionParse(message: ParseMessage, store: IStore<State, never>): void {
 }
 
 function sleep(delay: number = 1): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, delay);
@@ -86,7 +86,7 @@ it("Sync & Scheduled Actions", async () => {
 	store.register("select", actionSelect);
 	store.register("download", actionDownload);
 	store.register("parse", actionParse);
-	store.serialize = state => {
+	store.serialize = (state) => {
 		const props: Props = {
 			loading: state.loading,
 			result: state.selected in state.results ? state.results[state.selected] : ""

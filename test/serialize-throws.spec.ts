@@ -27,7 +27,7 @@ function actionAdd<State extends PartialState>(message: AddMessage, store: IStor
 }
 
 function sleep(delay: number = 1): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, delay);
@@ -37,7 +37,7 @@ function sleep(delay: number = 1): Promise<void> {
 it("State as Class", async () => {
 	const store = new Store<State, Props, AddMessage>();
 	store.register("add", actionAdd);
-	store.serialize = _state => {
+	store.serialize = (_state) => {
 		throw new Error("Expected Error");
 	};
 	expect(typeof store.props).toBe("undefined", "props initially");
