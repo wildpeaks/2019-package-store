@@ -24,7 +24,7 @@ function actionGood<State>(_message: GoodMessage, _store: IStore<State, never>):
 it("Undefined Action", () => {
 	const store = new Store<State, Props, GoodMessage | BadMessage>();
 	store.register("good", actionGood);
-	store.serialize = _state => {
+	store.serialize = (_state) => {
 		const props: Props = {
 			dummy: "hello"
 		};

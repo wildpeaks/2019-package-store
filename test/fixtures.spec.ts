@@ -18,7 +18,7 @@ let app: any;
 let server: any;
 
 function sleep(duration: number): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, duration);
@@ -45,7 +45,7 @@ async function testFixture(options: any): Promise<string[]> {
 	expect(stats.compilation.errors).toEqual([]);
 
 	let actualFiles: string[] = await rreaddir(outputFolder);
-	actualFiles = actualFiles.map(filepath => relative(outputFolder, filepath).replace(/\\/g, "/"));
+	actualFiles = actualFiles.map((filepath) => relative(outputFolder, filepath).replace(/\\/g, "/"));
 	return actualFiles;
 }
 
@@ -56,13 +56,13 @@ beforeAll(() => {
 	jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 });
 
-afterAll(done => {
+afterAll((done) => {
 	server.close(() => {
 		done();
 	});
 });
 
-beforeEach(done => {
+beforeEach((done) => {
 	rimraf(outputFolder, () => {
 		mkdirSync(outputFolder);
 		done();
