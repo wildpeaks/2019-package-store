@@ -29,12 +29,6 @@
     "bracketSpacing": false,
     "trailingComma": "none"
   },
-  "greenkeeper": {
-    "commitMessages": {
-      "dependencyUpdate": "feat: update ${dependency}",
-      "devDependencyUpdate": "chore: update ${dependency}"
-    }
-  },
   "main": "src/Store.ts",
   "types": "src/Store.ts",
   "files": [
