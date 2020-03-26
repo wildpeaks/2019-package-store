@@ -1,6 +1,6 @@
 # Store
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/wildpeaks/package-store.svg)](https://greenkeeper.io/)
+
 
 Tiny Typescript class to store an **immutable state** that can be edited using **JSON messages** actions,
 and **emits JSON props on state change**.
