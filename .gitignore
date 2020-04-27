@@ -16,6 +16,7 @@
 !/.editorconfig
 !/.gitattributes
 !/.gitignore
+!/.github
 !/.npmrc
 !/.prettierignore
 !/.vscode
