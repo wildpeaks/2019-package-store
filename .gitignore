@@ -1,35 +1,24 @@
-
-#-----------------------------------------------------------------------------#
 # Ignore everything by default:
-#-----------------------------------------------------------------------------#
-
 /*
 /*/
 
-
-#-----------------------------------------------------------------------------#
 # But allow those files and folders:
-#-----------------------------------------------------------------------------#
-
 !/LICENSE
 !/README.md
 !/.editorconfig
 !/.gitattributes
 !/.gitignore
+!/.github
 !/.npmrc
 !/.prettierignore
 !/.vscode
-!/azure-pipelines.yml
 !/src
 !/test
 !/register.typescript.js
 !/tsconfig.json
 !/package.json
 
-#-----------------------------------------------------------------------------#
 # But make sure to ignore those regardless:
-#-----------------------------------------------------------------------------#
-
 .DS_Store
 Thumbs.db
 WAS *
