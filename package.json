@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/jasmine": "3.5.10",
     "@wildpeaks/eslint-config-typescript": "9.3.0",
-    "@wildpeaks/tsconfig-web": "2.6.0",
+    "@wildpeaks/tsconfig-web": "2.6.1",
     "@wildpeaks/webpack-config-web": "4.21.0",
     "eslint": "6.8.0",
     "express": "4.17.1",
