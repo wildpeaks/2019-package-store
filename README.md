@@ -1,6 +1,7 @@
 # Store
 
-
+![Github Release](https://img.shields.io/github/v/release/wildpeaks/
+package-store.svg?label=Release&logo=github&logoColor=eceff4&colorA=4c566a&colorB=11abfb)
 
 Tiny Typescript class to store an **immutable state** that can be edited using **JSON messages** actions,
 and **emits JSON props on state change**.
