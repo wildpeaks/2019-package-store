@@ -45,7 +45,7 @@
     "@wildpeaks/eslint-config-typescript": "10.3.0",
     "@wildpeaks/tsconfig-web": "2.7.0",
     "@wildpeaks/webpack-config-web": "4.24.0",
-    "eslint": "7.1.0",
+    "eslint": "7.2.0",
     "express": "4.17.1",
     "jasmine": "3.5.0",
     "preact": "10.4.4",
