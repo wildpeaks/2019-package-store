@@ -1,3 +1,13 @@
 {
-	"extends": "@wildpeaks/tsconfig-web"
+	"ts-node": {
+		"skipIgnore": true,
+		"transpileOnly": true,
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	},
+	"extends": "@wildpeaks/tsconfig-web",
+	"compilerOptions": {
+		"types": ["@types/node", "@types/mocha"]
+	}
 }
