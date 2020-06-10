@@ -19,6 +19,4 @@
 !/package.json
 
 # But make sure to ignore those regardless:
-.DS_Store
-Thumbs.db
 WAS *
