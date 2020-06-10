@@ -35,7 +35,7 @@
     "src"
   ],
   "scripts": {
-    "test": "jasmine --helper=register.typescript.js test/*.spec.ts"
+    "test": "jasmine --helper=register.typescript.js test/*.test.ts"
   },
   "peerDependencies": {
     "typescript": "*"
