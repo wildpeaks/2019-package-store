@@ -1,9 +1,9 @@
 /* eslint-env node */
 /* eslint-disable prefer-arrow-callback */
-import {strictEqual, deepStrictEqual} from "assert";
+import {strictEqual} from "assert";
 import {it} from "mocha";
-import {Store, IStore} from "../src/Store";
 import * as sinon from "sinon";
+import {Store, IStore} from "../src/Store";
 
 type Props = Readonly<{
 	readonly value: string;
@@ -38,14 +38,13 @@ function sleep(delay: number = 1): Promise<void> {
 }
 
 it("State as Class", /* @this */ async function (): Promise<void> {
+	this.slow(2000);
+	this.timeout(2000);
+
 	const store = new Store<State, Props, AddMessage>();
 	store.register("add", actionAdd);
-	store.serialize = (state) => {
-		const props: Props = {
-			value: `Count is ${state.count}`
-		};
-		Object.freeze(props);
-		return props;
+	store.serialize = (_state) => {
+		throw new Error("Expected Error");
 	};
 	strictEqual(typeof store.props, "undefined", "props initially");
 	strictEqual(typeof store.state, "undefined", "state initially");
@@ -57,30 +56,18 @@ it("State as Class", /* @this */ async function (): Promise<void> {
 	const spySchedule = sinon.spy(store, "schedule");
 	strictEqual(spySchedule.callCount, 0, "schedule initially");
 
-	store.state = {
-		count: 0
-	};
+	let throws = false;
+	try {
+		store.state = {
+			count: 0
+		};
+	} catch (e) {
+		throws = true;
+	}
 	await sleep();
-	strictEqual(spyOnProps.callCount, 1, "onprops after initial state");
+	strictEqual(throws, true, "initial state throws an Error");
+	strictEqual(spyOnProps.callCount, 0, "onprops after initial state");
 	strictEqual(spySchedule.callCount, 0, "schedule after initial state");
-	deepStrictEqual(store.props, {value: "Count is 0"}, "store.props after initial state");
-	strictEqual(typeof store.state, "object", "state is an Object after initial state");
-	strictEqual(store.state.count, 0, "store.state.count after initial state");
-
-	store.schedule({
-		action: "add",
-		delta: 1
-	});
-	await sleep();
-	strictEqual(spyOnProps.callCount, 2, "onprops after @add");
-	strictEqual(spySchedule.callCount, 1, "schedule after @add");
-	deepStrictEqual(store.props, {value: "Count is 1"}, "store.props after @add");
-	strictEqual(typeof store.state, "object", "state is an Object after @add");
-	strictEqual(store.state.count, 1, "store.state.count after @add");
-
-	const calls = spyOnProps.getCalls().map((call) => call.args);
-	deepStrictEqual(calls, [
-		[{value: "Count is 0"}],
-		[{value: "Count is 1"}]
-	]);
+	strictEqual(typeof store.props, "undefined", "props after initial state");
+	strictEqual(typeof store.state, "undefined", "state after initial state");
 });
