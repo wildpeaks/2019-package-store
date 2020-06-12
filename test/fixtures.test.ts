@@ -16,8 +16,6 @@ const getWebpackConfig = require("@wildpeaks/webpack-config-web");
 
 const rootFolder = join(__dirname, "fixtures");
 const outputFolder = join(__dirname, "../out");
-let app: any;
-let server: any;
 
 function sleep(duration: number = 200): Promise<void> {
 	return new Promise((resolve) => {
@@ -62,17 +60,29 @@ async function testFixture(options: any): Promise<string[]> {
 	return actualFiles;
 }
 
-const port = 8888;
-before(() => {
-	app = express();
-	app.use(express.static(outputFolder));
-	server = app.listen(port);
-});
-
-after((done) => {
-	server.close(() => {
-		done();
+let server: any;
+let port = 0;
+function startExpress(): Promise<number> {
+	return new Promise((resolve) => {
+		const app = express();
+		app.use(express.static(outputFolder));
+		server = app.listen(0, () => {
+			resolve(server.address().port);
+		});
 	});
+}
+function stopExpress(): Promise<void> {
+	return new Promise((resolve) => {
+		server.close(() => {
+			resolve();
+		});
+	});
+}
+before(async function (): Promise<void> {
+	port = await startExpress();
+});
+after(async function (): Promise<void> {
+	await stopExpress();
 });
 
 
