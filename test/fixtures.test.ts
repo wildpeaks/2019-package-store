@@ -96,7 +96,7 @@ async function testBasic(host: BrowserType<Browser>): Promise<void> {
 		const page = await context.newPage();
 
 		const actual: any[] = [];
-		await page.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
@@ -183,7 +183,7 @@ async function testWebworker(host: BrowserType<Browser>): Promise<void> {
 		const page = await context.newPage();
 
 		const actual: any[] = [];
-		await page.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
@@ -275,7 +275,7 @@ async function testSharedAction(host: BrowserType<Browser>): Promise<void> {
 
 		const actual1: any[] = [];
 		const page1 = await context.newPage();
-		await page1.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page1.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual1.push(parsed);
 		});
@@ -290,7 +290,7 @@ async function testSharedAction(host: BrowserType<Browser>): Promise<void> {
 
 		const actual2: any[] = [];
 		const page2 = await browser.newPage();
-		await page2.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page2.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual2.push(parsed);
 		});
@@ -354,7 +354,7 @@ async function testMultipleStores(host: BrowserType<Browser>): Promise<void> {
 		const page = await context.newPage();
 
 		const actual: any[] = [];
-		await page.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
@@ -435,7 +435,7 @@ async function testPreactRender(host: BrowserType<Browser>): Promise<void> {
 			let throws = false;
 			try {
 				// @ts-ignore
-				window.PUPPETEER_STORE.schedule({
+				window.MOCHA_STORE.schedule({
 					action: "add",
 					toAdd: 123
 				});
@@ -508,7 +508,7 @@ async function testCollection(host: BrowserType<Browser>): Promise<void> {
 		const page = await context.newPage();
 
 		const actual: any[] = [];
-		await page.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
@@ -583,7 +583,7 @@ async function testNestedCollection(host: BrowserType<Browser>): Promise<void> {
 		const context = await browser.newContext();
 		const page = await context.newPage();
 
-		await page.exposeFunction("PUPPETER_ON_PROPS", (stringified: string) => {
+		await page.exposeFunction("MOCHA_ON_STORE_PROPS", (stringified: string) => {
 			const parsed = JSON.parse(stringified);
 			actual.push(parsed);
 		});
