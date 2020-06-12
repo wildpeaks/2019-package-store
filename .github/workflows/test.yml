@@ -14,9 +14,6 @@ jobs:
       - name: Download sources
         uses: actions/checkout@v1
 
-      - name: Install Webkit dependency
-        run: sudo apt-get install -y libegl1
-
       - name: Use Node LTS
         uses: actions/setup-node@v1
         with:
@@ -25,5 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - uses: microsoft/playwright-github-action@v1
       - name: Run the tests
         run: npm run test
