@@ -257,11 +257,11 @@ describe("Webworker", function () {
 		this.timeout(15000);
 		await testWebworker(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testWebworker(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testWebworker(webkit);
+	});
 });
 
 
@@ -336,11 +336,11 @@ describe("Shared Action", function () {
 		this.timeout(15000);
 		await testSharedAction(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testSharedAction(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testSharedAction(webkit);
+	});
 });
 
 
@@ -399,11 +399,11 @@ describe("Multiple Stores", function () {
 		this.timeout(15000);
 		await testMultipleStores(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testMultipleStores(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testMultipleStores(webkit);
+	});
 });
 
 
@@ -490,11 +490,11 @@ describe("Preact Render", function () {
 		this.timeout(15000);
 		await testPreactRender(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testPreactRender(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testPreactRender(webkit);
+	});
 });
 
 
@@ -565,11 +565,11 @@ describe("Collection", function () {
 		this.timeout(15000);
 		await testCollection(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testCollection(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testCollection(webkit);
+	});
 });
 
 
@@ -654,9 +654,9 @@ describe("Nested Collection", function () {
 		this.timeout(15000);
 		await testNestedCollection(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testNestedCollection(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testNestedCollection(webkit);
+	});
 });
