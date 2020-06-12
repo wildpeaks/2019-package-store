@@ -1,8 +1,8 @@
 /**
  * @file An action that never emits additional actions
  */
-import {IStore} from '../../../../../..';
-import {Message as LogMessage} from 'messages/log';
+import {IStore} from "../../../../src/Store";
+import {Message as LogMessage} from "../messages/log";
 
 export type PartialState = {
 	messages: string[];

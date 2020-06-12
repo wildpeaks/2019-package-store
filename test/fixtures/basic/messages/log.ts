@@ -1,13 +1,13 @@
-export const Id = 'log';
+export const id = "log";
 
 export type Message = Readonly<{
-	action: 'log';
+	action: "log";
 	text: string;
 }>;
 
 export function format(blabla: string): Message {
 	return {
-		action: Id,
+		action: id,
 		text: blabla
 	};
 }

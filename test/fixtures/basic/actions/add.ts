@@ -1,9 +1,10 @@
 /**
  * @file An action that can emit additional "log" actions
  */
-import {IStore} from '../../../../../..';
-import {Message as AddMessage} from 'messages/add';
-import {Message as LogMessage, format as log} from 'messages/log';
+/* eslint-env shared-node-browser */
+import {IStore} from "../../../../src/Store";
+import {Message as AddMessage} from "../messages/add";
+import {Message as LogMessage, format as log} from "../messages/log";
 
 
 export type PartialState = {
