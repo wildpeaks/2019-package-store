@@ -1,4 +1,6 @@
 {
+	"mochaExplorer.require": "ts-node/register/transpile-only",
+	"mochaExplorer.files": "test/**/*.test.ts",
 	"eslint.validate": [
 		"typescript"
 	],
