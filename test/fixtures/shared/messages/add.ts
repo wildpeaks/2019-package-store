@@ -1,4 +1,4 @@
-export const id = "add";
+export const messageId = "add";
 
 export type Message = Readonly<{
 	action: "add";

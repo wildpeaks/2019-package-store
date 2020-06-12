@@ -5,8 +5,8 @@ import {action as actionAdd} from "./actions/add";
 import {StoreState} from "./types/StoreState";
 import {StoreProps} from "./types/StoreProps";
 import {StoreMessage} from "./types/StoreMessage";
-import {id as LogMessageId} from "./messages/log";
-import {id as AddMessageId} from "./messages/add";
+import {messageId as LogMessageId} from "./messages/log";
+import {messageId as AddMessageId} from "./messages/add";
 
 
 // Create the Store & register actions

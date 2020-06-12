@@ -1,4 +1,4 @@
-export const id = "add";
+export const messageId = "add";
 
 export type Message = Readonly<{
 	action: "add";
@@ -7,7 +7,7 @@ export type Message = Readonly<{
 
 export function format(blabla: number): Message {
 	return {
-		action: id,
+		action: messageId,
 		toAdd: blabla
 	};
 }

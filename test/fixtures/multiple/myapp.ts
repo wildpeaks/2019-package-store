@@ -1,8 +1,8 @@
 import {Store} from "../../..";
 import {action as actionLog} from "./actions/log";
 import {action as actionAdd} from "./actions/add";
-import {id as LogMessageId, Message as LogMessage, format as log} from "./messages/log";
-import {id as AddMessageId, Message as AddMessage, format as add} from "./messages/add";
+import {messageId as LogMessageId, Message as LogMessage, format as log} from "./messages/log";
+import {messageId as AddMessageId, Message as AddMessage, format as add} from "./messages/add";
 
 
 // First store
