@@ -5,7 +5,7 @@
 /* global window */
 import {strictEqual, deepStrictEqual} from "assert";
 import {before, after, describe, it} from "mocha";
-import {chromium, firefox, BrowserType, Browser} from "playwright";
+import {chromium, firefox, webkit, BrowserType, Browser} from "playwright";
 const {join, relative} = require("path");
 const {mkdirSync} = require("fs");
 const express = require("express");
@@ -165,11 +165,11 @@ describe("Basic", function () {
 		this.timeout(15000);
 		await testBasic(firefox);
 	});
-	// it("Webkit", /* @this */ async function (): Promise<void> {
-	// 	this.slow(5000);
-	// 	this.timeout(15000);
-	// 	await testBasic(webkit);
-	// });
+	it("Webkit", /* @this */ async function (): Promise<void> {
+		this.slow(5000);
+		this.timeout(15000);
+		await testBasic(webkit);
+	});
 });
 
 
