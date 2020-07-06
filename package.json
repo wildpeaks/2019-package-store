@@ -46,7 +46,7 @@
     "@wildpeaks/eslint-config-typescript": "10.5.0",
     "@wildpeaks/tsconfig-web": "2.7.0",
     "@wildpeaks/webpack-config-web": "4.24.1",
-    "eslint": "7.3.1",
+    "eslint": "7.4.0",
     "express": "4.17.1",
     "mocha": "8.0.1",
     "playwright": "1.1.1",
