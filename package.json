@@ -45,7 +45,7 @@
     "@types/sinon": "9.0.5",
     "@wildpeaks/eslint-config-typescript": "10.6.0",
     "@wildpeaks/tsconfig-web": "2.8.0",
-    "@wildpeaks/webpack-config-web": "5.1.0",
+    "@wildpeaks/webpack-config-web": "5.2.0",
     "eslint": "7.7.0",
     "express": "4.17.1",
     "mocha": "8.1.2",
