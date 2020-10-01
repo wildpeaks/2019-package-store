@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@types/mocha": "8.0.3",
-    "@types/sinon": "9.0.6",
+    "@types/sinon": "9.0.7",
     "@wildpeaks/eslint-config-typescript": "10.7.0",
     "@wildpeaks/tsconfig-web": "2.9.0",
     "@wildpeaks/webpack-config-web": "5.6.0",
