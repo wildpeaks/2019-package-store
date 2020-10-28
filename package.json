@@ -49,7 +49,7 @@
     "eslint": "7.12.1",
     "express": "4.17.1",
     "mocha": "8.2.0",
-    "playwright": "1.5.1",
+    "playwright": "1.5.2",
     "preact": "10.5.5",
     "prettier": "2.1.2",
     "recursive-readdir": "2.2.2",
