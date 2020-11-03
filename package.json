@@ -48,7 +48,7 @@
     "@wildpeaks/webpack-config-web": "5.11.0",
     "eslint": "7.12.1",
     "express": "4.17.1",
-    "mocha": "8.2.0",
+    "mocha": "8.2.1",
     "playwright": "1.5.2",
     "preact": "10.5.5",
     "prettier": "2.1.2",
