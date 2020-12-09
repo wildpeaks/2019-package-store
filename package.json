@@ -41,7 +41,7 @@
     "typescript": "*"
   },
   "devDependencies": {
-    "@types/mocha": "8.0.4",
+    "@types/mocha": "8.2.0",
     "@types/sinon": "9.0.9",
     "@wildpeaks/eslint-config-typescript": "10.7.0",
     "@wildpeaks/tsconfig-web": "2.11.0",
