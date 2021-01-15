@@ -50,7 +50,7 @@
     "express": "4.17.1",
     "mocha": "8.2.1",
     "playwright": "1.7.1",
-    "preact": "10.5.9",
+    "preact": "10.5.10",
     "prettier": "2.2.1",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
