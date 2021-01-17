@@ -6,8 +6,5 @@
 			"module": "CommonJS"
 		}
 	},
-	"extends": "@wildpeaks/tsconfig-web",
-	"compilerOptions": {
-		"types": ["@types/node", "@types/mocha"]
-	}
+	"extends": "@wildpeaks/tsconfig"
 }
