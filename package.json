@@ -35,7 +35,7 @@
     "src"
   ],
   "scripts": {
-    "test": "mocha -r ts-node/register/transpile-only test/*.test.ts"
+    "test": "mocha -r ts-node/register test/*.test.ts"
   },
   "peerDependencies": {
     "typescript": "*"
