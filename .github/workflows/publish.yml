@@ -1,0 +1,119 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: 'Version (e.g. "1.0.0-rc1")'
+
+jobs:
+  publish:
+    timeout-minutes: 15
+    runs-on: ubuntu-20.04
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+
+    - name: Install node
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: 14.x
+
+    - name: Install dependencies
+      run: npm install --prefer-offline --no-fund --no-progress
+    - uses: microsoft/playwright-github-action@v1
+
+    - name: Initialize deployment
+      id: deployment
+      uses: actions/github-script@v3.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const tag = /^[0-9]+\.[0-9]+\.[0-9]+$/.test("${{ github.event.inputs.version }}") ? 'latest' : 'preview';
+          const deployment = await github.repos.createDeployment({
+            environment: tag,
+            ref: '${{ github.sha }}',
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          core.setOutput('id', deployment.data.id);
+          core.setOutput('tag', tag);
+
+    - name: Parameters
+      run: |
+        echo Branch ${{ github.ref }}
+        echo Version ${{ github.event.inputs.version }}
+        echo NPM Tag ${{ steps.deployment.outputs.tag }}
+        echo Deployment ${{ steps.deployment.outputs.id }}
+
+    - name: Test
+      run: npm run test
+
+    - name: Package
+      run: |
+        PACKAGE_CONTENTS=$(jq '.version = "${{ github.event.inputs.version }}"' package.json)
+        echo $PACKAGE_CONTENTS > package.json
+        npm pack
+
+    - name: Create Release
+      id: release
+      uses: actions/github-script@v3.1
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const release = await github.repos.createRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag_name: 'v${{ github.event.inputs.version }}',
+            target_commitish: context.sha,
+            name: '${{ github.event.inputs.version }}',
+            body: '',
+            draft: false,
+            prerelease: '${{ steps.deployment.outputs.tag }}' !== 'latest'
+          });
+          core.setOutput('upload_url', release.data.upload_url);
+
+    - name: Attach
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: ./wildpeaks-store-${{ github.event.inputs.version }}.tgz
+        asset_name: package.tgz
+        asset_content_type: application/gzip
+
+    - name: Publish
+      run: |
+        echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        npm publish --tag ${{ steps.deployment.outputs.tag }}
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_DEPLOY_KEY }}
+
+    - name: On success
+      if: success()
+      uses: actions/github-script@v3.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: '${{ steps.deployment.outputs.id }}',
+            state: 'success'
+          });
+
+    - name: On error
+      if: failure() || cancelled()
+      uses: actions/github-script@v3.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: '${{ steps.deployment.outputs.id }}',
+            state: 'failure'
+          });
