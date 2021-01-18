@@ -29,7 +29,7 @@ function actionAdd<State extends PartialState>(message: AddMessage, store: IStor
 	store.state = newState;
 }
 
-function sleep(delay: number = 1): Promise<void> {
+async function sleep(delay: number = 1): Promise<void> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();

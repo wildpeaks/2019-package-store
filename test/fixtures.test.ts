@@ -17,7 +17,7 @@ const getWebpackConfig = require("@wildpeaks/webpack-config-web");
 const rootFolder = join(__dirname, "fixtures");
 const outputFolder = join(__dirname, "../out");
 
-function sleep(duration: number = 200): Promise<void> {
+async function sleep(duration: number = 200): Promise<void> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
@@ -25,7 +25,7 @@ function sleep(duration: number = 200): Promise<void> {
 	});
 }
 
-function compile(config: any): Promise<any> {
+async function compile(config: any): Promise<any> {
 	return new Promise((resolve, reject) => {
 		webpack(config, (err: any, stats: any) => {
 			if (err) {
@@ -37,7 +37,7 @@ function compile(config: any): Promise<any> {
 	});
 }
 
-function resetOutput(): Promise<void> {
+async function resetOutput(): Promise<void> {
 	return new Promise((resolve) => {
 		rimraf(outputFolder, () => {
 			mkdirSync(outputFolder);
@@ -56,13 +56,13 @@ async function testFixture(options: any): Promise<string[]> {
 	deepStrictEqual(stats.compilation.errors, [], "No compilation errors");
 
 	let actualFiles: string[] = await rreaddir(outputFolder);
-	actualFiles = actualFiles.map((filepath) => relative(outputFolder, filepath).replace(/\\/g, "/"));
+	actualFiles = actualFiles.map((filepath) => relative(outputFolder, filepath).replace(/\\/gu, "/"));
 	return actualFiles;
 }
 
 let server: any;
 let port = 0;
-function startExpress(): Promise<number> {
+async function startExpress(): Promise<number> {
 	return new Promise((resolve) => {
 		const app = express();
 		app.use(express.static(outputFolder));
@@ -71,7 +71,7 @@ function startExpress(): Promise<number> {
 		});
 	});
 }
-function stopExpress(): Promise<void> {
+async function stopExpress(): Promise<void> {
 	return new Promise((resolve) => {
 		server.close(() => {
 			resolve();

@@ -9,12 +9,10 @@
 !/.gitattributes
 !/.gitignore
 !/.github
-!/.npmrc
 !/.prettierignore
 !/.vscode
 !/src
 !/test
-!/register.typescript.js
 !/tsconfig.json
 !/package.json
 
