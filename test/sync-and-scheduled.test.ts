@@ -76,7 +76,7 @@ function actionParse(message: ParseMessage, store: IStore<State, never>): void {
 	store.state = newState;
 }
 
-function sleep(delay: number = 1): Promise<void> {
+async function sleep(delay: number = 1): Promise<void> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();

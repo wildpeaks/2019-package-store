@@ -38,7 +38,7 @@ function actionAdd(message: AddMessage, store: IStore<StateClass, never>): void 
 	store.state = newState;
 }
 
-function sleep(delay: number = 1): Promise<void> {
+async function sleep(delay: number = 1): Promise<void> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
