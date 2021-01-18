@@ -13,7 +13,6 @@
 !/.vscode
 !/src
 !/test
-!/register.typescript.js
 !/tsconfig.json
 !/package.json
 
