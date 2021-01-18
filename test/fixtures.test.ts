@@ -56,7 +56,7 @@ async function testFixture(options: any): Promise<string[]> {
 	deepStrictEqual(stats.compilation.errors, [], "No compilation errors");
 
 	let actualFiles: string[] = await rreaddir(outputFolder);
-	actualFiles = actualFiles.map((filepath) => relative(outputFolder, filepath).replace(/\\/g, "/"));
+	actualFiles = actualFiles.map((filepath) => relative(outputFolder, filepath).replace(/\\/gu, "/"));
 	return actualFiles;
 }
 
