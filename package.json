@@ -45,7 +45,7 @@
     "@types/node": "14.14.21",
     "@types/sinon": "9.0.10",
     "@wildpeaks/eslint-config-typescript": "11.0.0-rc3",
-    "@wildpeaks/tsconfig": "4.0.0-rc2",
+    "@wildpeaks/tsconfig": "4.0.0",
     "@wildpeaks/webpack-config-web": "5.16.0",
     "eslint": "7.18.0",
     "express": "4.17.1",
