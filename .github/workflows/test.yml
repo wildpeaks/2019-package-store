@@ -2,12 +2,12 @@ name: Test
 on:
   push:
     branches:
-    - master
+    - main
     - features/**
     - dependabot/**
   pull_request:
     branches:
-    - master
+    - main
 jobs:
   tests:
     strategy:
