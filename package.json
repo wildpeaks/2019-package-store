@@ -51,7 +51,7 @@
     "express": "4.17.1",
     "mocha": "8.3.2",
     "playwright": "1.9.1",
-    "preact": "10.5.12",
+    "preact": "10.5.13",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
     "sinon": "9.2.4",
