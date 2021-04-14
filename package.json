@@ -22,13 +22,7 @@
       }
     }
   },
-  "prettier": {
-    "printWidth": 120,
-    "tabWidth": 4,
-    "useTabs": true,
-    "bracketSpacing": false,
-    "trailingComma": "none"
-  },
+  "prettier": "@wildpeaks/prettier-config",
   "main": "src/Store.ts",
   "types": "src/Store.ts",
   "files": [
@@ -42,6 +36,7 @@
     "@types/node": "14.14.37",
     "@types/sinon": "10.0.0",
     "@wildpeaks/eslint-config-typescript": "11.4.0",
+    "@wildpeaks/prettier-config": "11.4.0",
     "@wildpeaks/tsconfig": "4.0.0",
     "@wildpeaks/webpack-config-web": "5.16.0",
     "eslint": "7.24.0",
