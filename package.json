@@ -37,9 +37,6 @@
   "scripts": {
     "test": "mocha -r ts-node/register test/*.test.ts"
   },
-  "peerDependencies": {
-    "typescript": "*"
-  },
   "devDependencies": {
     "@types/mocha": "8.2.2",
     "@types/node": "14.14.37",
