@@ -42,7 +42,7 @@
     "eslint": "7.26.0",
     "express": "4.17.1",
     "mocha": "8.4.0",
-    "playwright": "1.10.0",
+    "playwright": "1.11.0",
     "preact": "10.5.13",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
