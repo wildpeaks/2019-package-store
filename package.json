@@ -32,7 +32,7 @@
     "test": "mocha -r ts-node/register test/*.test.ts"
   },
   "devDependencies": {
-    "@types/mocha": "8.2.2",
+    "@types/mocha": "8.2.3",
     "@types/node": "16.0.0",
     "@types/sinon": "10.0.2",
     "@wildpeaks/eslint-config-typescript": "12.2.0",
