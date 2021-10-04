@@ -35,7 +35,7 @@
     "@types/mocha": "9.0.0",
     "@types/node": "16.10.2",
     "@types/sinon": "10.0.4",
-    "@wildpeaks/eslint-config-typescript": "13.1.0",
+    "@wildpeaks/eslint-config-typescript": "13.2.0",
     "@wildpeaks/prettier-config": "13.2.0",
     "@wildpeaks/tsconfig": "4.0.0",
     "@wildpeaks/webpack-config-web": "5.16.0",
