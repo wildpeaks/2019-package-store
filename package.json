@@ -46,7 +46,7 @@
     "preact": "10.5.15",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
-    "sinon": "12.0.0",
+    "sinon": "12.0.1",
     "ts-loader": "9.0.0",
     "ts-node": "10.4.0",
     "typescript": "4.4.4",
